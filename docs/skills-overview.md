@@ -31,7 +31,7 @@
 
 **你怎么知道它在起作用** Issue 上出现状态判定与关闭回执，且全链只有它一处作出这个判定。
 
-**什么会让它失效** 方法登记面的证据等级分布与登记面 README 声明不符；或三端 description 可见预算的实测基线（2026-08-11 测得 1000 UTF-8 字节）被新的实测推翻。
+**什么会让它失效** GitHub 原生 sub-issue 关系、Project v2 字段写入语义或 Issue 关闭权限模型发生变化，使正文描述的建图与状态判定不再可执行。
 
 所属 Plugin `github-collaboration` `0.3.18`｜体积 60.1 KB（占预算 29.5%）｜上次复核 2026-08-15｜正文 [`plugins/github-collaboration/skills/issue-workflow/SKILL.md`](../plugins/github-collaboration/skills/issue-workflow/SKILL.md)
 
@@ -43,7 +43,7 @@
 
 **你怎么知道它在起作用** 方向变了会明确说出来；没变就直接继续，不额外汇报。
 
-**什么会让它失效** 方法登记面的证据等级分布与正文声明不符，或三端 description 实测可见预算低于 1000 UTF-8 字节。
+**什么会让它失效** 方法登记面的证据等级分布与登记面 README 声明不符；或三端 description 可见预算的实测基线（2026-08-11 测得 1000 UTF-8 字节）被新的实测推翻。
 
 所属 Plugin `adaptive-problem-solving` `0.2.11`｜体积 22.0 KB（占预算 10.8%）｜上次复核 2026-08-15｜正文 [`plugins/adaptive-problem-solving/skills/adaptive-problem-solving/SKILL.md`](../plugins/adaptive-problem-solving/skills/adaptive-problem-solving/SKILL.md)
 
@@ -55,7 +55,7 @@
 
 **你怎么知道它在起作用** Issue 上出现类型化派发合同，以及与实施者不同的独立验收回执。
 
-**什么会让它失效** 所选协调后端（当前 orca orchestration）的 Run／Task／Dispatch 语义或标准释放回执格式变化，使派发合同与收口判据无法从执行事实判定。
+**什么会让它失效** 所选协调后端（当前 orca orchestration）的 Run／Task／Dispatch 语义或标准释放回执格式变化；或其唯一原则源 agent-control/authority/05-resource-operations.md 的资源投入原则变化，使 R1–R6 派发门失去依据。
 
 所属 Plugin `orchestrated-collaboration` `0.2.6`｜体积 21.2 KB（占预算 10.4%）｜上次复核 2026-08-15｜正文 [`plugins/orchestrated-collaboration/skills/orchestrated-collaboration/SKILL.md`](../plugins/orchestrated-collaboration/skills/orchestrated-collaboration/SKILL.md)
 
@@ -127,7 +127,7 @@
 
 **你怎么知道它在起作用** 给出带时间戳的读数；取不到就明说未知，不猜。
 
-**什么会让它失效** agent-control/authority/05-resource-operations.md 的 R1–R6 规则变化，或额度与产能观测面不再可读。
+**什么会让它失效** orca account list --json 的返回结构变化：顶层 ok、result.rateLimits.claude／codex 的 status 与 updatedAt，或 usedPercent／windowMinutes／resetsAt／rateLimitResetCredits 这些窗口字段不再按 Skill 正文描述提供。
 
 所属 Plugin `resource-observability` `0.2.4`｜体积 9.7 KB（占预算 4.8%）｜上次复核 2026-08-15｜正文 [`plugins/resource-observability/skills/resource-observability/SKILL.md`](../plugins/resource-observability/skills/resource-observability/SKILL.md)
 

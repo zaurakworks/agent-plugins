@@ -121,8 +121,8 @@
     "comment": "每个 Skill 的失效条件与最少复核步骤，对应 agent-control/authority/01-knowledge.md 可信门第 6、7 条。lastVerified 为 null 表示本制度建立以来尚未复核过——这是真实状态，不是占位。规则见 docs/lifecycle.md。",
     "entries": {
       "issue-workflow": {
-        "invalidatedWhen": "方法登记面的证据等级分布与登记面 README 声明不符；或三端 description 可见预算的实测基线（2026-08-11 测得 1000 UTF-8 字节）被新的实测推翻。",
-        "minimalRecheck": "逐卡取当前能力证据等级，与登记面 README 的 M0／M1 计数比对。三端 description 回显需要交互式观察运行端目录，不在本步内：预算门本身已由符合性测试守住，重测只在怀疑运行端截断行为变化时才做。",
+        "invalidatedWhen": "GitHub 原生 sub-issue 关系、Project v2 字段写入语义或 Issue 关闭权限模型发生变化，使正文描述的建图与状态判定不再可执行。",
+        "minimalRecheck": "在目标仓建一个父 Issue 与一个子 Issue，走一遍 recover→classify→leaf，确认原生父子关系、Project 条目写入与关闭三处仍按正文描述响应。",
         "lastVerified": "2026-08-15",
         "suspect": false
       },
@@ -157,14 +157,14 @@
         "suspect": false
       },
       "orchestrated-collaboration": {
-        "invalidatedWhen": "所选协调后端（当前 orca orchestration）的 Run／Task／Dispatch 语义或标准释放回执格式变化，使派发合同与收口判据无法从执行事实判定。",
-        "minimalRecheck": "对一个真实 Run 取一次 task 与 dispatch 列表，确认五字段派发合同与四项释放证明都能取到。",
+        "invalidatedWhen": "所选协调后端（当前 orca orchestration）的 Run／Task／Dispatch 语义或标准释放回执格式变化；或其唯一原则源 agent-control/authority/05-resource-operations.md 的资源投入原则变化，使 R1–R6 派发门失去依据。",
+        "minimalRecheck": "对一个真实 Run 取一次 task-list 与 worker-list，确认派发合同字段与释放证明可取；并读一次 authority/05 的资源投入原则，确认 R1–R6 投影仍成立且链接指向当前仓而非已冻结的老仓。",
         "lastVerified": "2026-08-15",
         "suspect": false
       },
       "adaptive-problem-solving": {
-        "invalidatedWhen": "方法登记面的证据等级分布与正文声明不符，或三端 description 实测可见预算低于 1000 UTF-8 字节。",
-        "minimalRecheck": "重跑一次三端 description 回显实测，并核对登记面 M0／M1 计数与正文声明一致。",
+        "invalidatedWhen": "方法登记面的证据等级分布与登记面 README 声明不符；或三端 description 可见预算的实测基线（2026-08-11 测得 1000 UTF-8 字节）被新的实测推翻。",
+        "minimalRecheck": "逐卡取当前能力证据等级，与登记面 README 的 M0／M1 计数比对。三端 description 回显需要交互式观察运行端目录，不在本步内：预算门本身已由符合性测试守住，重测只在怀疑运行端截断行为变化时才做。",
         "lastVerified": "2026-08-15",
         "suspect": false
       },
@@ -187,8 +187,8 @@
         "suspect": false
       },
       "resource-observability": {
-        "invalidatedWhen": "agent-control/authority/05-resource-operations.md 的 R1–R6 规则变化，或额度与产能观测面不再可读。",
-        "minimalRecheck": "读一次该权威核对 R1–R6，并实际取一次当前额度观测。",
+        "invalidatedWhen": "orca account list --json 的返回结构变化：顶层 ok、result.rateLimits.claude／codex 的 status 与 updatedAt，或 usedPercent／windowMinutes／resetsAt／rateLimitResetCredits 这些窗口字段不再按 Skill 正文描述提供。",
+        "minimalRecheck": "跑一次 orca account list --json，确认 ok 为真、两个 Provider 的 status 与 updatedAt 可读、上述窗口字段仍存在且量纲未变。",
         "lastVerified": "2026-08-15",
         "suspect": false
       }

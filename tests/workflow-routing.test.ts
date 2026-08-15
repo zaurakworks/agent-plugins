@@ -2521,6 +2521,21 @@ for (const [skill, entry] of Object.entries(skillLifecycle)) {
   }
 }
 
+// 两个 Skill 声明出一模一样的失效条件，几乎只有两种来源：复制粘贴没改，或者某次
+// 批量改写把别人的值覆盖了过来。2026-08-15 真发生过后者——一个按名字定位的改写脚本
+// 把三对编辑全落到了同一条上，issue-workflow 的声明被 adaptive-problem-solving 的
+// 覆盖，而目标三条一条没改到。生成的选型面把它显示出来才被发现。这道断言让它下次
+// 在 CI 就撞上。
+const invalidationTexts = new Map<string, string>();
+for (const [skill, entry] of Object.entries(skillLifecycle)) {
+  const previous = invalidationTexts.get(entry.invalidatedWhen);
+  assert.ok(
+    !previous,
+    `${skill} 与 ${previous} 的失效条件逐字相同：要么是复制粘贴没改，要么是某次改写覆盖了别人的值`,
+  );
+  invalidationTexts.set(entry.invalidatedWhen, skill);
+}
+
 const budget = manifest.complexityBudget as {
   unit: string;
   maxSkills: number;
