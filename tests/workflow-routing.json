@@ -177,7 +177,7 @@
       "knowledge-maintenance": {
         "invalidatedWhen": "agent-control/authority/01-knowledge.md 的两道准入门或可信门八项条件发生变化。",
         "minimalRecheck": "读一次该权威，逐条比对价值门与可信门八项和正文引用是否一致。",
-        "lastVerified": null,
+        "lastVerified": "2026-08-15",
         "suspect": false
       },
       "grilling": {
