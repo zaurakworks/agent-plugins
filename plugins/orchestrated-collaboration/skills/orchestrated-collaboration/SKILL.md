@@ -62,7 +62,7 @@ Orca TUI 是观察面，`orca orchestration` 才是执行事实与协调后端�
 
 1. 派工前动态读取 `orca skills get orchestration --full`；
 2. 直接控制终端或 worktree 时再读对应指南；只保留发现入口，不复制动态命令；
-3. 创建或绑定 Run；继任前先读取[K12（协调者压缩存续与继任协议）](https://github.com/Eridanus117/agent-control/blob/main/knowledge/coordinator-succession-protocol.md)并通过双协调停止门，同一目标不建竞争 Run；
+3. 创建或绑定 Run；继任前先读取[K12（协调者压缩存续与继任协议）](https://github.com/zaurakworks/agent-control/blob/main/knowledge/coordinator-succession-protocol.md)并通过双协调停止门，同一目标不建竞争 Run；
 4. 使用当前指南的 Task、Dispatch、Delivery 与生命周期合同；
 5. 保存 Run、Task、Dispatch、执行者和交付标识，不把其他工具冒称为 Orca；
 6. 冲突时工具合同管命令与生命周期，本 Skill 管目标、授权、拆分、验收与综合。
@@ -101,7 +101,7 @@ Orca 的当前能力与本机样本只用于以后比较“直接依赖、Fork�
 
 ### 资源投入派发门（R1–R6）
 
-唯一原则源是 [`authority/05`](https://github.com/Eridanus117/agent-control/blob/main/authority/05-resource-operations.md)“资源投入原则”；这里只投影动作顺序，不复制证据历史或动态阈值，不用额度或空闲 Agent 绕门。
+唯一原则源是 [`authority/05`](https://github.com/zaurakworks/agent-control/blob/main/authority/05-resource-operations.md)“资源投入原则”；这里只投影动作顺序，不复制证据历史或动态阈值，不用额度或空闲 Agent 绕门。
 
 1. **R1｜价值门。** 须有授权、稳定交付、独立验收，且无额度期限也值得完成、价值高于总成本；否则留在队列外，不为并发数或消耗比例造任务、拆单。
 2. **R2｜就绪队列与排他所有权。** 只计依赖已解、无需猜偏好、互无依赖且写入排他的候选；执行者不超过此可并行深度。交付后扫描新解锁项，但扫描解锁不扩大授权。

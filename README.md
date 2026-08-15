@@ -24,7 +24,7 @@
 
 正文中指向 `Eridanus117/agent-control` 的 Issue 链接**不在本次改动范围**：那些是历史证据，老仓冻结后仍可读，指向它是正确的。
 
-仓库目前包含七个可安装 Plugin：`grilling` `0.1.2`、`self-improvement` `0.1.6`、`knowledge-maintenance` `0.1.3`、`orchestrated-collaboration` `0.2.5`、`adaptive-problem-solving` `0.2.11`、`github-collaboration` `0.3.18` 与 `resource-observability` `0.2.4`。
+仓库目前包含七个可安装 Plugin：`grilling` `0.1.2`、`self-improvement` `0.1.6`、`knowledge-maintenance` `0.1.3`、`orchestrated-collaboration` `0.2.6`、`adaptive-problem-solving` `0.2.11`、`github-collaboration` `0.3.18` 与 `resource-observability` `0.2.4`。
 
 `self-improvement` `0.1.4` 按[关联 agent-control#139（P0-1 迭代回执地基）](https://github.com/Eridanus117/agent-control/issues/139)承载一份按需读取的十字段迭代回执协议；`adaptive-problem-solving` `0.2.9` 在阶段合同与攻防裁决需要跨 Session 恢复时引用该协议，`knowledge-maintenance` `0.1.1` 只回填知识出口证据。回执寄生于当前 Issue 的同一条自足评论与自然里程碑，不建数据库、独立登记表或定时器；APS 继续是唯一任务内控制器，Issue 生命周期与知识准入仍各归现有机制，`orchestrated-collaboration` 不成为第二承载面。
 
