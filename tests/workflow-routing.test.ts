@@ -7,6 +7,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { render as renderSkillsOverview } from '../scripts/skills-overview.ts';
 
 type EdgeKind = 'drive' | 'return' | 'reference';
 
@@ -2520,6 +2521,21 @@ for (const [skill, entry] of Object.entries(skillLifecycle)) {
   }
 }
 
+// 两个 Skill 声明出一模一样的失效条件，几乎只有两种来源：复制粘贴没改，或者某次
+// 批量改写把别人的值覆盖了过来。2026-08-15 真发生过后者——一个按名字定位的改写脚本
+// 把三对编辑全落到了同一条上，issue-workflow 的声明被 adaptive-problem-solving 的
+// 覆盖，而目标三条一条没改到。生成的选型面把它显示出来才被发现。这道断言让它下次
+// 在 CI 就撞上。
+const invalidationTexts = new Map<string, string>();
+for (const [skill, entry] of Object.entries(skillLifecycle)) {
+  const previous = invalidationTexts.get(entry.invalidatedWhen);
+  assert.ok(
+    !previous,
+    `${skill} 与 ${previous} 的失效条件逐字相同：要么是复制粘贴没改，要么是某次改写覆盖了别人的值`,
+  );
+  invalidationTexts.set(entry.invalidatedWhen, skill);
+}
+
 const budget = manifest.complexityBudget as {
   unit: string;
   maxSkills: number;
@@ -2552,6 +2568,35 @@ for (const plugin of pluginNames) {
 assert.ok(
   corpusBytes <= budget.corpusMaxUtf8Bytes,
   `Skill 语料 ${corpusBytes} UTF-8 字节，超过上限 ${budget.corpusMaxUtf8Bytes}：正确动作是给出被压缩或退役的对象，不是把数字改大`,
+);
+
+// ---------- 8.6 选型面是生成产物，不能与来源漂移 ----------
+
+// docs/skills-overview.md 写给负责人。它由 scripts/skills-overview.ts 从
+// pluginVersions、skillLifecycle、skillOverview 与实测字节生成。这里重新生成
+// 一次并与提交在仓里的文件比对——文档一旦能被手改就会漂，而这正是
+// docs/lifecycle.md 要防的东西，选型面自己也得守这条。
+assert.deepEqual(
+  Object.keys(manifest.skillOverview.entries).sort(),
+  [...declared].sort(),
+  'skillOverview 必须恰好覆盖全部 Skill：新增 Skill 必须同时给出写给负责人的三句话',
+);
+for (const [skill, entry] of Object.entries(
+  manifest.skillOverview.entries as Record<string, Record<string, string>>,
+)) {
+  for (const field of ['forYou', 'whenToUse', 'workingSignals']) {
+    assert.ok(
+      typeof entry[field] === 'string' && entry[field].trim().length >= 10,
+      `${skill}: 选型面缺少 ${field}`,
+    );
+  }
+}
+const overviewPath = join(repoRoot, 'docs', 'skills-overview.md');
+assert.ok(existsSync(overviewPath), 'docs/skills-overview.md 必须存在');
+assert.equal(
+  read(overviewPath),
+  renderSkillsOverview(),
+  'docs/skills-overview.md 与来源不一致：它是生成产物，请跑 node scripts/skills-overview.ts --write，不要手改',
 );
 
 // ---------- 9. README 的版本总览不能落后于 manifest ----------

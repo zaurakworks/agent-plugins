@@ -121,8 +121,8 @@
     "comment": "每个 Skill 的失效条件与最少复核步骤，对应 agent-control/authority/01-knowledge.md 可信门第 6、7 条。lastVerified 为 null 表示本制度建立以来尚未复核过——这是真实状态，不是占位。规则见 docs/lifecycle.md。",
     "entries": {
       "issue-workflow": {
-        "invalidatedWhen": "方法登记面的证据等级分布与登记面 README 声明不符；或三端 description 可见预算的实测基线（2026-08-11 测得 1000 UTF-8 字节）被新的实测推翻。",
-        "minimalRecheck": "逐卡取当前能力证据等级，与登记面 README 的 M0／M1 计数比对。三端 description 回显需要交互式观察运行端目录，不在本步内：预算门本身已由符合性测试守住，重测只在怀疑运行端截断行为变化时才做。",
+        "invalidatedWhen": "GitHub 原生 sub-issue 关系、Project v2 字段写入语义或 Issue 关闭权限模型发生变化，使正文描述的建图与状态判定不再可执行。",
+        "minimalRecheck": "在目标仓建一个父 Issue 与一个子 Issue，走一遍 recover→classify→leaf，确认原生父子关系、Project 条目写入与关闭三处仍按正文描述响应。",
         "lastVerified": "2026-08-15",
         "suspect": false
       },
@@ -157,14 +157,14 @@
         "suspect": false
       },
       "orchestrated-collaboration": {
-        "invalidatedWhen": "所选协调后端（当前 orca orchestration）的 Run／Task／Dispatch 语义或标准释放回执格式变化，使派发合同与收口判据无法从执行事实判定。",
-        "minimalRecheck": "对一个真实 Run 取一次 task 与 dispatch 列表，确认五字段派发合同与四项释放证明都能取到。",
+        "invalidatedWhen": "所选协调后端（当前 orca orchestration）的 Run／Task／Dispatch 语义或标准释放回执格式变化；或其唯一原则源 agent-control/authority/05-resource-operations.md 的资源投入原则变化，使 R1–R6 派发门失去依据。",
+        "minimalRecheck": "对一个真实 Run 取一次 task-list 与 worker-list，确认派发合同字段与释放证明可取；并读一次 authority/05 的资源投入原则，确认 R1–R6 投影仍成立且链接指向当前仓而非已冻结的老仓。",
         "lastVerified": "2026-08-15",
         "suspect": false
       },
       "adaptive-problem-solving": {
-        "invalidatedWhen": "方法登记面的证据等级分布与正文声明不符，或三端 description 实测可见预算低于 1000 UTF-8 字节。",
-        "minimalRecheck": "重跑一次三端 description 回显实测，并核对登记面 M0／M1 计数与正文声明一致。",
+        "invalidatedWhen": "方法登记面的证据等级分布与登记面 README 声明不符；或三端 description 可见预算的实测基线（2026-08-11 测得 1000 UTF-8 字节）被新的实测推翻。",
+        "minimalRecheck": "逐卡取当前能力证据等级，与登记面 README 的 M0／M1 计数比对。三端 description 回显需要交互式观察运行端目录，不在本步内：预算门本身已由符合性测试守住，重测只在怀疑运行端截断行为变化时才做。",
         "lastVerified": "2026-08-15",
         "suspect": false
       },
@@ -187,10 +187,75 @@
         "suspect": false
       },
       "resource-observability": {
-        "invalidatedWhen": "agent-control/authority/05-resource-operations.md 的 R1–R6 规则变化，或额度与产能观测面不再可读。",
-        "minimalRecheck": "读一次该权威核对 R1–R6，并实际取一次当前额度观测。",
+        "invalidatedWhen": "orca account list --json 的返回结构变化：顶层 ok、result.rateLimits.claude／codex 的 status 与 updatedAt，或 usedPercent／windowMinutes／resetsAt／rateLimitResetCredits 这些窗口字段不再按 Skill 正文描述提供。",
+        "minimalRecheck": "跑一次 orca account list --json，确认 ok 为真、两个 Provider 的 status 与 updatedAt 可读、上述窗口字段仍存在且量纲未变。",
         "lastVerified": "2026-08-15",
         "suspect": false
+      }
+    }
+  },
+  "skillOverview": {
+    "comment": "写给负责人的选型面来源。只保留推导不出来的三句；版本、上次复核、失效条件、体积与预算占比由 scripts/skills-overview.ts 从 pluginVersions、skillLifecycle 与实测字节推出——写两遍就会漂。docs/skills-overview.md 是生成产物，符合性测试断言它与本表一致，因此不可能漂。",
+    "entries": {
+      "issue-workflow": {
+        "forYou": "让任何一个 Session 只凭远端 Issue 就知道自己该干什么、干到哪、能不能关。",
+        "whenToUse": "手上有明确 Issue 时。没有 Issue 时它不挑活，会退回经营总账。",
+        "workingSignals": "Issue 上出现状态判定与关闭回执，且全链只有它一处作出这个判定。"
+      },
+      "issue-delivery": {
+        "forYou": "叶子 Issue 出 PR 前的工程检查与 PR 现状快照，避免拿没跑过的东西当交付。",
+        "whenToUse": "手上的叶子 Issue 要出 PR 时。",
+        "workingSignals": "PR 描述里有覆盖维度、实际运行了什么、以及剩余验证缺口。"
+      },
+      "pr-integration": {
+        "forYou": "分支维护与合并前核对，防止把冲突或落后的分支合进主干。",
+        "whenToUse": "要合并，或分支落后于主干时。",
+        "workingSignals": "合并前有冲突逐项处理与相称验证，合并后只做 fast-forward。"
+      },
+      "issue-contract-compaction": {
+        "forYou": "把长 Issue 压成能恢复的合同，不丢授权、状态与未收口关系。",
+        "whenToUse": "Issue 评论长到影响新 Session 恢复时。",
+        "workingSignals": "恢复的 Session 读到的是压缩后的合同，而不是从头读全部历史。"
+      },
+      "objective-to-issues": {
+        "forYou": "新建 Issue 一次到位：七类前缀、类型与领域标签、父级、运营台条目同批完成。",
+        "whenToUse": "要新建 Issue 时。",
+        "workingSignals": "新 Issue 建出来就带类型、领域、父级和运营台条目，不需要事后补。"
+      },
+      "operating-ledger-maintenance": {
+        "forYou": "维护经营总账，把诉求、候选、决定、交付与证据分开记，不混成一锅。",
+        "whenToUse": "出现值得跨 Session 保留的诉求、决定或证据变化时；或你要看总账时。",
+        "workingSignals": "总账上诉求状态、执行状态与证据等级三者分开，不互相冒充。"
+      },
+      "orchestrated-collaboration": {
+        "forYou": "多 Agent、多 Session 时的写入所有权、派发合同与独立验收。",
+        "whenToUse": "已授权的多席协作或共享写入碰撞。单 Session 不触发。",
+        "workingSignals": "Issue 上出现类型化派发合同，以及与实施者不同的独立验收回执。"
+      },
+      "adaptive-problem-solving": {
+        "forYou": "问题求解治理：选方法、控成本、该退出就退出，别在一条路上耗死。",
+        "whenToUse": "第一次实质路径选择、进展停滞、范围明显扩大或要交接验收时。",
+        "workingSignals": "方向变了会明确说出来；没变就直接继续，不额外汇报。"
+      },
+      "self-improvement": {
+        "forYou": "把一次纠正变成系统改进，并判断该改入口、改 Skill 还是只记任务。",
+        "whenToUse": "你指出漂移、误解，或同类错误复发时。一次性小错不触发。",
+        "workingSignals": "纠正落到某个持久载体，而不只是当次口头改了。"
+      },
+      "knowledge-maintenance": {
+        "forYou": "知识准入：价值门、可信门、失效条件与下次最少复核步骤。",
+        "whenToUse": "多来源调研、可重复实验，或结论会影响权威与重要决定时。",
+        "workingSignals": "写下的知识带失效条件和下次复核步骤，做不到复核就退出当前知识。"
+      },
+      "grilling": {
+        "forYou": "用结构化追问压力测试一个计划或决定，把没想清楚的地方逼出来。",
+        "whenToUse": "你直接要求，或明确接受建议时。它不会因为任务复杂就自动开始。",
+        "workingSignals": "你会被连续追问，且随时可以喊停或换普通路径。"
+      },
+      "resource-observability": {
+        "forYou": "分开看两件事：账户还剩多少额度何时恢复，和这次工作实际花了多少。",
+        "whenToUse": "准备扩大并发、资源接近耗尽，或你问额度时。",
+        "workingSignals": "给出带时间戳的读数；取不到就明说未知，不猜。"
       }
     }
   },
