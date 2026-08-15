@@ -8,23 +8,26 @@
 
 一条贯穿规则：**能落成检查就不写成文字。** 下面每条规则都标注它实际落在哪一层——只有第 4 层（文本）才依赖执行者自觉，而第 4 层的每一条都应被视为暂时状态。
 
-## 零、源码即生产
+## 零、装了才算数
 
-**`C:\Users\Morni\workspace\agent-plugins` 是生产源，不是工作目录。**
+**会话从版本缓存 `plugins/cache/<插件>/<版本>/` 加载 Skill。工作树只是 Marketplace 源。**
 
-三个运行端的 Marketplace 都注册为指向它的本机目录源，而 2026-08-15 实测确认：两个运行端把 Skill **解析到这份工作树本身**，不是 `plugins/cache/<插件>/<版本>/`。
+2026-08-15 对两个运行端各做一次直接测试：在工作树里给一个插件的 manifest `description` 植入未提交标记，然后起一个**真实的新会话**问它这个 skill 的 description——Claude 与 Codex 报出的都是缓存里的旧值，标记没有出现。
 
-- Claude：改工作树 `SKILL.md` 后不重装，`claude plugin details` 报的 on-invoke 成本立刻从 ~7.8k 变 ~14.3k，还原即回落；
-- Codex：`codex plugin list` 的 `PATH` 列直接就是 `…/workspace/agent-plugins/plugins/<插件>`。
+因此：**合并不等于生效，装了才算数。** 在工作树里改动、甚至合并进 `main`，都不改变任何会话的行为，直到内容被装进缓存。
 
-所以「已审源码 → 已安装内容 → 实际行为」这条链中间那一环不存在：**源码即行为**。在生产检出上切分支或留未提交改动，新 Session 会实时读到那份内容。
+> 本节曾写成「源码即生产」，说工作树就是加载路径、未合并内容实时生效。那个结论来自 `claude plugin details` 的 on-invoke 估算随工作树变化——但那是 CLI 检视命令在算「装了会是多大」，与会话加载是两条代码路径。**拿 CLI 显示推断会话行为，推错了两轮**，完整来回见 [`agent-control#11`](https://github.com/zaurakworks/agent-control/issues/11)。留下这段是因为错误结论本身有信息量：能被观察到的东西，不一定是正在起作用的东西。
 
-负责人 2026-08-15 决定接受这个事实并调整工作方式，而不是造一个受控快照层——Claude 端可行、Codex 端不可行，半边隔离比不隔离更难查。因此：
+**边界**：以上是 manifest 层的直接实测。`SKILL.md` 正文没有单独测——插件作为一个整体装进同一个缓存目录（含 manifest 与 `skills/` 全部文件），正文同源是推断，不是实测。
+
+### 由此得到的工作方式
 
 | 位置 | 状态 | 谁动它 |
 | --- | --- | --- |
-| `workspace/agent-plugins` | 永远是 `origin/main` 的干净检出 | 只有 `plugin_release sync` 快进它 |
+| `workspace/agent-plugins` | 保持 `origin/main` 的干净检出 | 只有 `plugin_release sync` 快进它 |
 | `workspace/agent-plugins-work/<分支>` | git worktree，随便改 | 所有开发在这里 |
+
+生产检出保持干净**不再是安全要求**——在它上面编辑不会立刻影响任何会话。它是**可判定性要求**：漂移检测要回答「装的是不是 `origin/main` 应有的内容」，而工作树停在特性分支时它不代表那个内容，检测就失明了。
 
 新建开发 worktree：
 
@@ -32,15 +35,15 @@
 git -C C:/Users/Morni/workspace/agent-plugins worktree add ../agent-plugins-work/<分支> -b <分支>
 ```
 
-合并后让新正文生效：
+合并后**让新正文真正生效**：
 
 ```
 python C:/Users/Morni/workspace/agent-control/tools/plugin_release/plugin_release.py sync --apply
 ```
 
-`sync` 会校验生产检出干净且在 `main`、快进、**报告本次生效的行为变化**、刷新缓存账目并做指纹验收。生效时机因此可控：不 `sync` 就不生效。
+`sync` 校验生产检出干净且在 `main`、快进、报告本次生效的行为变化、**把内容装进缓存**、指纹验收。第三步不是账目维护，**那就是部署本身**。
 
-强制层次：生产检出被污染时，`plugin_release check --hook` 在会话启动时提醒（第 2⁻ 层）；`sync` 在检出不干净或不在 `main` 时直接拒绝执行（第 2 层）。**「开发不要在生产检出里做」本身仍是纪律（第 4 层）**——git 不阻止你在任何 worktree 里编辑。
+强制层次：`sync` 在检出不干净或不在 `main` 时直接拒绝（第 2 层）；`plugin_release check --hook` 在会话启动时报缓存漂移，或在判不出时如实说判不出（第 2⁻ 层）；「开发不要在生产检出里做」仍是纪律（第 4 层）——git 不阻止你在任何 worktree 里编辑。
 
 ## 一、失效条件与最少复核
 
@@ -116,14 +119,14 @@ python tools/plugin_release/plugin_release.py retire <插件> --apply
 
 | 规则 | 层 | 承载 |
 | --- | --- | --- |
-| 生产检出不干净或不在 main 时不得发布 | 2 拦截 | `plugin_release sync` 直接拒绝 |
+| 生产检出不干净或不在 main 时不得部署 | 2 拦截 | `plugin_release sync` 直接拒绝 |
 | 选型面不得与来源漂移 | 2 拦截 | CI 重新生成并逐字节比对 |
 | 必须声明失效条件与最少复核步骤 | 2 拦截 | CI 断言存在且非空 |
 | `suspect` 标记的结构完整性 | 2 拦截 | CI 断言同时有命中条件与日期 |
 | 数量与语料总量不得净增 | 2 拦截 | CI 断言 `complexityBudget` |
 | 退役必须确认三处都不存在 | 3 生成 | `plugin_release retire` |
 | 复核到期提醒 | 3 生成 | `plugin_release check` 本地报告 |
-| 开发不在生产检出里做 | **4 文本** | 无（会话启动钩子只在事后提醒） |
+| 开发不在生产检出里做 | **4 文本** | 无（只影响漂移检测能否判定，不影响会话行为） |
 | 被标记 `suspect` 后不得再作判据 | **4 文本** | 无 |
 | 写作判据（leading word／完成门／退出） | **4 文本** | 无 |
 
