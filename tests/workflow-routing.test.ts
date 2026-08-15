@@ -491,7 +491,7 @@ assert.ok(
 for (const marker of [
   '格式为 `<Issue 号>-<局部编号>`',
   '主体类型必须是 GitHub `User`',
-  '`author.login` 必须等于目标仓库所有者账号',
+  '`author.login` 必须等于当前权威／Issue 合同明示的负责人账号',
 ]) {
   assert.ok(issueWorkflowReferences.ownerDecision.includes(marker), `决定 reference 缺少安全门 ${marker}`);
 }

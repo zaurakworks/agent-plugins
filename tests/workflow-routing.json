@@ -123,7 +123,7 @@
     "knowledge-maintenance": "0.1.3",
     "orchestrated-collaboration": "0.2.5",
     "adaptive-problem-solving": "0.2.11",
-    "github-collaboration": "0.3.17",
+    "github-collaboration": "0.3.18",
     "resource-observability": "0.2.4"
   },
   "descriptionBudget": {
@@ -1001,7 +1001,7 @@
             "先沿用 `pr-integration` 对人、bot 与 GitHub App 的来源区分语义",
             "主体类型必须是 GitHub `User`",
             "Bot、GitHub App 及无法取得主体类型的评论只作证据",
-            "`author.login` 必须等于目标仓库所有者账号，或等于当前权威／Issue 合同明示的负责人账号",
+            "`author.login` 必须等于当前权威／Issue 合同明示的负责人账号",
             "身份缺失或不匹配时，不写决定回执、不消费负责人动作"
           ]
         },
