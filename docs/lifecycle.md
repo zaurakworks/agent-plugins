@@ -8,6 +8,40 @@
 
 一条贯穿规则：**能落成检查就不写成文字。** 下面每条规则都标注它实际落在哪一层——只有第 4 层（文本）才依赖执行者自觉，而第 4 层的每一条都应被视为暂时状态。
 
+## 零、源码即生产
+
+**`C:\Users\Morni\workspace\agent-plugins` 是生产源，不是工作目录。**
+
+三个运行端的 Marketplace 都注册为指向它的本机目录源，而 2026-08-15 实测确认：两个运行端把 Skill **解析到这份工作树本身**，不是 `plugins/cache/<插件>/<版本>/`。
+
+- Claude：改工作树 `SKILL.md` 后不重装，`claude plugin details` 报的 on-invoke 成本立刻从 ~7.8k 变 ~14.3k，还原即回落；
+- Codex：`codex plugin list` 的 `PATH` 列直接就是 `…/workspace/agent-plugins/plugins/<插件>`。
+
+所以「已审源码 → 已安装内容 → 实际行为」这条链中间那一环不存在：**源码即行为**。在生产检出上切分支或留未提交改动，新 Session 会实时读到那份内容。
+
+负责人 2026-08-15 决定接受这个事实并调整工作方式，而不是造一个受控快照层——Claude 端可行、Codex 端不可行，半边隔离比不隔离更难查。因此：
+
+| 位置 | 状态 | 谁动它 |
+| --- | --- | --- |
+| `workspace/agent-plugins` | 永远是 `origin/main` 的干净检出 | 只有 `plugin_release sync` 快进它 |
+| `workspace/agent-plugins-work/<分支>` | git worktree，随便改 | 所有开发在这里 |
+
+新建开发 worktree：
+
+```
+git -C C:/Users/Morni/workspace/agent-plugins worktree add ../agent-plugins-work/<分支> -b <分支>
+```
+
+合并后让新正文生效：
+
+```
+python C:/Users/Morni/workspace/agent-control/tools/plugin_release/plugin_release.py sync --apply
+```
+
+`sync` 会校验生产检出干净且在 `main`、快进、**报告本次生效的行为变化**、刷新缓存账目并做指纹验收。生效时机因此可控：不 `sync` 就不生效。
+
+强制层次：生产检出被污染时，`plugin_release check --hook` 在会话启动时提醒（第 2⁻ 层）；`sync` 在检出不干净或不在 `main` 时直接拒绝执行（第 2 层）。**「开发不要在生产检出里做」本身仍是纪律（第 4 层）**——git 不阻止你在任何 worktree 里编辑。
+
 ## 一、失效条件与最少复核
 
 每个 Skill 必须在 `tests/workflow-routing.json` 的 `skillLifecycle` 里声明两件事，缺一即 CI 失败：
@@ -82,11 +116,14 @@ python tools/plugin_release/plugin_release.py retire <插件> --apply
 
 | 规则 | 层 | 承载 |
 | --- | --- | --- |
+| 生产检出不干净或不在 main 时不得发布 | 2 拦截 | `plugin_release sync` 直接拒绝 |
+| 选型面不得与来源漂移 | 2 拦截 | CI 重新生成并逐字节比对 |
 | 必须声明失效条件与最少复核步骤 | 2 拦截 | CI 断言存在且非空 |
 | `suspect` 标记的结构完整性 | 2 拦截 | CI 断言同时有命中条件与日期 |
 | 数量与语料总量不得净增 | 2 拦截 | CI 断言 `complexityBudget` |
 | 退役必须确认三处都不存在 | 3 生成 | `plugin_release retire` |
 | 复核到期提醒 | 3 生成 | `plugin_release check` 本地报告 |
+| 开发不在生产检出里做 | **4 文本** | 无（会话启动钩子只在事后提醒） |
 | 被标记 `suspect` 后不得再作判据 | **4 文本** | 无 |
 | 写作判据（leading word／完成门／退出） | **4 文本** | 无 |
 
