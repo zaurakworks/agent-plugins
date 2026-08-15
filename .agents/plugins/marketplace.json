@@ -45,7 +45,7 @@
     },
     {
       "name": "orchestrated-collaboration",
-      "version": "0.2.5",
+      "version": "0.2.6",
       "source": {
         "source": "local",
         "path": "./plugins/orchestrated-collaboration"

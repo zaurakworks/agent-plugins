@@ -1228,10 +1228,13 @@ assert.ok(successionRouteTarget, 'orchestrated-collaboration 必须给出 K12 �
 const successionRouteUrl = new URL(successionRouteTarget);
 assert.equal(successionRouteUrl.protocol, 'https:', 'K12 路由必须跨安装目录和工作区解析');
 assert.equal(successionRouteUrl.hostname, 'github.com', 'K12 路由必须使用稳定 GitHub 来源');
+// 2026-08-15 迁仓：`Eridanus117/agent-control` 已冻结只读，其 knowledge/ 会与当前
+// 权威漂移。旧断言把期望值钉在那个仓上，等于让测试主动锁定一份会变陈旧的来源——
+// 这比链接失效更糟：404 是响的，陈旧权威是哑的。改钉当前仓。
 assert.equal(
   successionRouteUrl.pathname,
-  '/Eridanus117/agent-control/blob/main/knowledge/coordinator-succession-protocol.md',
-  'K12 路由必须指向 agent-control 当前知识包，不得依赖调用方工作目录',
+  '/zaurakworks/agent-control/blob/main/knowledge/coordinator-succession-protocol.md',
+  'K12 路由必须指向 agent-control 当前知识包，不得依赖调用方工作目录，也不得指向已冻结的老仓',
 );
 const collaborationFrontmatter = collaborationSkillBody.slice(
   4,
