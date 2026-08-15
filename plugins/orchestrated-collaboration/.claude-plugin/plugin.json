@@ -1,0 +1,10 @@
+{
+  "name": "orchestrated-collaboration",
+  "version": "0.2.4",
+  "description": "Coordinate multiple Agents or Sessions through explicit ownership, bounded tasks, verified handoffs, independent parent-goal review, and synthesis.",
+  "author": {
+    "name": "Eridanus117"
+  },
+  "repository": "https://github.com/Eridanus117/agent-plugins",
+  "skills": "./skills/"
+}

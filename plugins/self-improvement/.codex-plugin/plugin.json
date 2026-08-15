@@ -1,0 +1,10 @@
+{
+  "name": "self-improvement",
+  "version": "0.1.5",
+  "description": "Turn observed Agent drift and reusable corrections into bounded prompt or Skill improvements.",
+  "author": {
+    "name": "Eridanus117"
+  },
+  "repository": "https://github.com/Eridanus117/agent-plugins",
+  "skills": "./skills/"
+}

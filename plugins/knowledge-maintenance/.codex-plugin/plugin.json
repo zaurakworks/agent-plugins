@@ -1,0 +1,10 @@
+{
+  "name": "knowledge-maintenance",
+  "version": "0.1.2",
+  "description": "Reuse current knowledge and research only changes, conflicts, and gaps before admitting updated conclusions.",
+  "author": {
+    "name": "Eridanus117"
+  },
+  "repository": "https://github.com/Eridanus117/agent-plugins",
+  "skills": "./skills/"
+}

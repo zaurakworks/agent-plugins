@@ -1,0 +1,47 @@
+{
+  "name": "agent-plugins",
+  "description": "Cross-provider Agent plugins maintained by Eridanus117.",
+  "owner": {
+    "name": "Eridanus117",
+    "url": "https://github.com/Eridanus117"
+  },
+  "plugins": [
+    {
+      "name": "grilling",
+      "version": "0.1.1",
+      "source": "./plugins/grilling"
+    },
+    {
+      "name": "self-improvement",
+      "version": "0.1.5",
+      "source": "./plugins/self-improvement"
+    },
+    {
+      "name": "knowledge-maintenance",
+      "version": "0.1.2",
+      "source": "./plugins/knowledge-maintenance"
+    },
+    {
+      "name": "orchestrated-collaboration",
+      "version": "0.2.4",
+      "source": "./plugins/orchestrated-collaboration"
+    },
+    {
+      "name": "adaptive-problem-solving",
+      "version": "0.2.10",
+      "source": "./plugins/adaptive-problem-solving"
+    },
+    {
+      "name": "github-collaboration",
+      "version": "0.3.16",
+      "description": "Drive a GitHub issue subtree from any Session, including bounded continuation, safe natural owner decisions, contract compaction, delivery, integration, and reclamation.",
+      "source": "./plugins/github-collaboration"
+    },
+    {
+      "name": "resource-observability",
+      "version": "0.2.3",
+      "description": "只读的 Codex／Claude 账户容量与单会话 Token 回执；不负责调度。",
+      "source": "./plugins/resource-observability"
+    }
+  ]
+}

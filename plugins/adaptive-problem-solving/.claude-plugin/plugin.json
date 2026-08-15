@@ -1,0 +1,10 @@
+{
+  "name": "adaptive-problem-solving",
+  "version": "0.2.10",
+  "description": "Govern problem framing, method choice, execution setup, parent-goal acceptance, and adaptive course correction.",
+  "author": {
+    "name": "Eridanus117"
+  },
+  "repository": "https://github.com/Eridanus117/agent-plugins",
+  "skills": "./skills/"
+}
