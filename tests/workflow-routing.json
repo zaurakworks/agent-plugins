@@ -117,6 +117,94 @@
       "**段调用不是生命周期决定**"
     ]
   },
+  "skillLifecycle": {
+    "comment": "每个 Skill 的失效条件与最少复核步骤，对应 agent-control/authority/01-knowledge.md 可信门第 6、7 条。lastVerified 为 null 表示本制度建立以来尚未复核过——这是真实状态，不是占位。规则见 docs/lifecycle.md。",
+    "entries": {
+      "issue-workflow": {
+        "invalidatedWhen": "GitHub 原生 sub-issue 关系、Project v2 字段写入语义或 Issue 关闭权限模型发生变化，使正文描述的建图与状态判定不再可执行。",
+        "minimalRecheck": "在目标仓建一个父 Issue 与一个子 Issue，走一遍 recover→classify→leaf，确认原生父子关系、Project 条目写入与关闭三处仍按正文描述响应。",
+        "lastVerified": null,
+        "suspect": false
+      },
+      "issue-contract-compaction": {
+        "invalidatedWhen": "GitHub 返回的时间标量精度或字段序列化形态变化，使「优先比较原始序列化标量」不再能区分真实变更。",
+        "minimalRecheck": "取同一 Issue 的两次 API 响应，按正文规则做一次压缩比较，确认既无假陈旧也无假一致。",
+        "lastVerified": null,
+        "suspect": false
+      },
+      "issue-delivery": {
+        "invalidatedWhen": "PR 创建、审阅请求或必需检查的语义变化，使交付前核对无法只从远端事实判定。",
+        "minimalRecheck": "对一个真实 PR 取一次快照，确认 Draft、review decision、required checks、merge state 四项都能取到且含义未变。",
+        "lastVerified": null,
+        "suspect": false
+      },
+      "objective-to-issues": {
+        "invalidatedWhen": "七类标题前缀闭集、两个 label 维度或经营总账 Project 的字段定义被负责人修改，使创建骨架的硬校验与实际仓库不符。",
+        "minimalRecheck": "用 agent-control 的 tools/issue_create 对目标仓库跑一次不写入的校验，确认七类前缀、类型/领域 label 与 Project 字段都存在且同名。",
+        "lastVerified": null,
+        "suspect": false
+      },
+      "pr-integration": {
+        "invalidatedWhen": "分支保护、合并策略或 force-push 的 lease 保护语义变化，使正文的分支维护步骤不再安全。",
+        "minimalRecheck": "在一个真实分支上走一遍 fetch→rebase→lease 保护更新，确认每一步的失败分支与正文一致。",
+        "lastVerified": null,
+        "suspect": false
+      },
+      "operating-ledger-maintenance": {
+        "invalidatedWhen": "agent-control/authority/10-operating-ledger.md 的事项结构或状态分级变化，使维护动作指向不存在的字段。",
+        "minimalRecheck": "读一次该权威，逐条比对正文引用的结构名与状态名是否仍存在。",
+        "lastVerified": null,
+        "suspect": false
+      },
+      "orchestrated-collaboration": {
+        "invalidatedWhen": "所选协调后端（当前 orca orchestration）的 Run／Task／Dispatch 语义或标准释放回执格式变化，使派发合同与收口判据无法从执行事实判定。",
+        "minimalRecheck": "对一个真实 Run 取一次 task 与 dispatch 列表，确认五字段派发合同与四项释放证明都能取到。",
+        "lastVerified": null,
+        "suspect": false
+      },
+      "adaptive-problem-solving": {
+        "invalidatedWhen": "方法登记面的证据等级分布与正文声明不符，或三端 description 实测可见预算低于 1000 UTF-8 字节。",
+        "minimalRecheck": "重跑一次三端 description 回显实测，并核对登记面 M0／M1 计数与正文声明一致。",
+        "lastVerified": null,
+        "suspect": false
+      },
+      "self-improvement": {
+        "invalidatedWhen": "入口、Skill、任务记录三个改进承载面之一消失或职责变更，使路由判据指向不存在的去向。",
+        "minimalRecheck": "逐个确认三个去向仍可写入，并各找出一个近期实例。",
+        "lastVerified": null,
+        "suspect": false
+      },
+      "knowledge-maintenance": {
+        "invalidatedWhen": "agent-control/authority/01-knowledge.md 的两道准入门或可信门八项条件发生变化。",
+        "minimalRecheck": "读一次该权威，逐条比对价值门与可信门八项和正文引用是否一致。",
+        "lastVerified": "2026-08-15",
+        "suspect": false
+      },
+      "grilling": {
+        "invalidatedWhen": "明示同意门被取消，或运行端改为按关键词自动进入长期盘问。",
+        "minimalRecheck": "确认触发路径仍要求用户直接请求或明确接受建议，且因剩余价值低或成本过高的退出门仍在。",
+        "lastVerified": null,
+        "suspect": false
+      },
+      "resource-observability": {
+        "invalidatedWhen": "agent-control/authority/05-resource-operations.md 的 R1–R6 规则变化，或额度与产能观测面不再可读。",
+        "minimalRecheck": "读一次该权威核对 R1–R6，并实际取一次当前额度观测。",
+        "lastVerified": null,
+        "suspect": false
+      }
+    }
+  },
+  "complexityBudget": {
+    "comment": "上限取 2026-08-15 的实际值，不留余量：目的是让「加」必须伴随「换」。撞上限时的正确动作是给出被压缩或退役的对象，不是把数字改大；提高上限是负责人决定，且必须在 Issue 留下理由。corpusMaxUtf8Bytes 同时覆盖 SKILL.md 与 references/，否则把正文挪进 references 就能绕过。docs/ 与 README 写给人看，不计入。",
+    "unit": "utf8-bytes",
+    "maxSkills": 12,
+    "corpusMaxUtf8Bytes": 209000,
+    "baseline": {
+      "observedAt": "2026-08-15",
+      "skills": 12,
+      "corpusUtf8Bytes": 208420
+    }
+  },
   "pluginVersions": {
     "grilling": "0.1.2",
     "self-improvement": "0.1.6",
