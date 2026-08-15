@@ -20,7 +20,11 @@
 
 `orchestrated-collaboration` `0.2.1` 按[关联 #128（资源投入规则两层承载落地）](https://github.com/Eridanus117/agent-control/issues/128)落实 120-D1=C：引用 `authority/05-resource-operations.md` 作为资源投入唯一原则源，以 R1–R6 就地置换“完成即扫描解锁／无依赖工作不伪串行／灵活使用产能”三条散规则，依次执行价值门、就绪队列与排他所有权、资源新鲜度、额度加速条件、验收容量与实验干扰、加派／维持／停止新增派发；不复制证据历史或动态阈值，不新增轮询、自动派发、自动停止或权益消费权限。
 
-仓库目前包含七个可安装 Plugin：`grilling` `0.1.1`、`self-improvement` `0.1.5`、`knowledge-maintenance` `0.1.2`、`orchestrated-collaboration` `0.2.4`、`adaptive-problem-solving` `0.2.10`、`github-collaboration` `0.3.16` 与 `resource-observability` `0.2.3`。
+本批按 clean-slate 迁仓修正发布身份：仓库所有权由 `Eridanus117` 迁至 `zaurakworks`，七个 Plugin 的 `author.name` 与 `repository` 字段、两份 Marketplace（Claude 与 Codex）、符合性版本声明与 README 版本总览同步更新，七个 Plugin 各递增一个修订号。**运行端重装与三端指纹验收必须在本版进入 `main` 后另行完成，不能由源仓合并推定。**
+
+正文中指向 `Eridanus117/agent-control` 的 Issue 链接**不在本次改动范围**：那些是历史证据，老仓冻结后仍可读，指向它是正确的。
+
+仓库目前包含七个可安装 Plugin：`grilling` `0.1.2`、`self-improvement` `0.1.6`、`knowledge-maintenance` `0.1.3`、`orchestrated-collaboration` `0.2.5`、`adaptive-problem-solving` `0.2.11`、`github-collaboration` `0.3.17` 与 `resource-observability` `0.2.4`。
 
 `self-improvement` `0.1.4` 按[关联 agent-control#139（P0-1 迭代回执地基）](https://github.com/Eridanus117/agent-control/issues/139)承载一份按需读取的十字段迭代回执协议；`adaptive-problem-solving` `0.2.9` 在阶段合同与攻防裁决需要跨 Session 恢复时引用该协议，`knowledge-maintenance` `0.1.1` 只回填知识出口证据。回执寄生于当前 Issue 的同一条自足评论与自然里程碑，不建数据库、独立登记表或定时器；APS 继续是唯一任务内控制器，Issue 生命周期与知识准入仍各归现有机制，`orchestrated-collaboration` 不成为第二承载面。
 
