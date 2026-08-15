@@ -2465,12 +2465,29 @@ assert.equal(
   githubManifest.description,
   'github-collaboration: Codex Marketplace 描述与 manifest 不一致',
 );
-// ---------- 9. README 的版本表述不能落后于 manifest ----------
+// ---------- 9. README 的版本总览不能落后于 manifest ----------
 
+// 只钉「仓库目前包含…」这一句总览。README 其余段落是历史叙述，记录某个版本当时做了
+// 什么，不随新版本改写。原实现对全文做 includes：一旦某个历史段落写出同样的
+// `插件` `版本` 形态——第 15 行「`adaptive-problem-solving` `0.2.10` 与
+// `orchestrated-collaboration` `0.2.4`」已是先例——总览行落后也检测不出来。
 const readme = read(join(repoRoot, 'README.md'));
+const overviewLines = readme.split('\n').filter((line) => line.includes('仓库目前包含'));
+assert.equal(overviewLines.length, 1, 'README 必须有且只有一句「仓库目前包含…」的版本总览');
+const overview = overviewLines[0];
 for (const [plugin, version] of Object.entries(manifest.pluginVersions)) {
-  assert.ok(readme.includes(`\`${plugin}\` \`${version}\``), `README 未记录 ${plugin} ${version}`);
+  assert.ok(
+    overview.includes(`\`${plugin}\` \`${version}\``),
+    `README 版本总览未记录 ${plugin} ${version}`,
+  );
 }
+// 总览多列一个已删除的 Plugin 时，上面的逐项检查不会失败；用数量兜住。
+const overviewPairs = overview.match(/`[a-z][a-z-]*` `\d+\.\d+\.\d+`/g) ?? [];
+assert.equal(
+  overviewPairs.length,
+  pluginNames.length,
+  `README 版本总览列出 ${overviewPairs.length} 个 Plugin，实际 ${pluginNames.length} 个`,
+);
 for (const skill of declared) {
   assert.ok(readme.includes(skill), `README 未提及 Skill ${skill}`);
 }
