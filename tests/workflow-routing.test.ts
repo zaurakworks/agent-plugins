@@ -4,7 +4,7 @@
 // 它检查的是版本化来源，不是某台电脑上的安装状态；通过不代表任一运行端已经安装成功。
 
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -2465,6 +2465,92 @@ assert.equal(
   githubManifest.description,
   'github-collaboration: Codex Marketplace 描述与 manifest 不一致',
 );
+// ---------- 8.5 生命周期声明与复杂度预算（docs/lifecycle.md）----------
+
+// 知识有失效条件、最少复核步骤，做不到就退出当前知识；Skill 一直没有这一层，
+// 发布即永远有效。下面把「必须声明」这一半变成机械门：CI 只能判定声明是否存在
+// 且非空，判定不了内容是否真实——后者归复核本身。
+
+type SkillLifecycleEntry = {
+  invalidatedWhen: string;
+  minimalRecheck: string;
+  lastVerified: string | null;
+  suspect: boolean;
+  suspectReason?: string;
+  suspectSince?: string;
+};
+
+const skillLifecycle = manifest.skillLifecycle?.entries as
+  | Record<string, SkillLifecycleEntry>
+  | undefined;
+assert.ok(skillLifecycle, 'tests/workflow-routing.json 缺少 skillLifecycle.entries');
+assert.deepEqual(
+  Object.keys(skillLifecycle).sort(),
+  [...declared].sort(),
+  'skillLifecycle 必须恰好覆盖全部 Skill：新增 Skill 必须同时声明失效条件与最少复核步骤',
+);
+for (const [skill, entry] of Object.entries(skillLifecycle)) {
+  // 长度下限不是形式主义：「过时了」「重新读一遍」这类占位串通不过一句可执行的动作描述。
+  assert.ok(
+    typeof entry.invalidatedWhen === 'string' && entry.invalidatedWhen.trim().length >= 20,
+    `${skill}: 必须声明可观察的失效条件`,
+  );
+  assert.ok(
+    typeof entry.minimalRecheck === 'string' && entry.minimalRecheck.trim().length >= 20,
+    `${skill}: 必须声明别人能照做的最少复核步骤`,
+  );
+  assert.ok(
+    entry.lastVerified === null || /^\d{4}-\d{2}-\d{2}$/.test(entry.lastVerified),
+    `${skill}: lastVerified 必须是 null 或 YYYY-MM-DD`,
+  );
+  assert.equal(typeof entry.suspect, 'boolean', `${skill}: suspect 必须是布尔`);
+  if (entry.suspect) {
+    // 标记为存疑却说不出哪条失效条件命中、什么时候命中的，等于没标记。
+    assert.ok(
+      entry.suspectReason && entry.suspectReason.trim().length >= 10,
+      `${skill}: suspect 为真时必须写明命中了哪一条失效条件`,
+    );
+    assert.ok(
+      entry.suspectSince && /^\d{4}-\d{2}-\d{2}$/.test(entry.suspectSince),
+      `${skill}: suspect 为真时必须写明命中日期`,
+    );
+  }
+}
+
+const budget = manifest.complexityBudget as {
+  unit: string;
+  maxSkills: number;
+  corpusMaxUtf8Bytes: number;
+};
+assert.ok(budget, 'tests/workflow-routing.json 缺少 complexityBudget');
+assert.equal(budget.unit, 'utf8-bytes', '复杂度预算量纲必须是 UTF-8 字节');
+assert.ok(
+  declared.length <= budget.maxSkills,
+  `Skill 数量 ${declared.length} 超过上限 ${budget.maxSkills}：新增必须同时给出被退役的对象，或由负责人批准提高上限并在 Issue 留下理由`,
+);
+
+// 语料 = 会被当作 Skill 加载进上下文的字节。同时覆盖 references/，否则把正文挪进
+// references 就能绕过预算。docs/ 与 README 写给人看，不计入。
+let corpusBytes = 0;
+for (const plugin of pluginNames) {
+  const skillsRoot = join(pluginsRoot, plugin, 'skills');
+  if (!existsSync(skillsRoot)) continue;
+  for (const skill of directories(skillsRoot)) {
+    corpusBytes += Buffer.byteLength(read(join(skillsRoot, skill, 'SKILL.md')), 'utf8');
+    const referencesRoot = join(skillsRoot, skill, 'references');
+    if (!existsSync(referencesRoot)) continue;
+    for (const file of readdirSync(referencesRoot)) {
+      if (file.endsWith('.md')) {
+        corpusBytes += Buffer.byteLength(read(join(referencesRoot, file)), 'utf8');
+      }
+    }
+  }
+}
+assert.ok(
+  corpusBytes <= budget.corpusMaxUtf8Bytes,
+  `Skill 语料 ${corpusBytes} UTF-8 字节，超过上限 ${budget.corpusMaxUtf8Bytes}：正确动作是给出被压缩或退役的对象，不是把数字改大`,
+);
+
 // ---------- 9. README 的版本总览不能落后于 manifest ----------
 
 // 只钉「仓库目前包含…」这一句总览。README 其余段落是历史叙述，记录某个版本当时做了
