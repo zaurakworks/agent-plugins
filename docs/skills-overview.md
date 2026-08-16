@@ -3,8 +3,8 @@
 
 # Skill 选型面
 
-写给负责人：每个 Skill 替你做什么、什么时候会用到、你怎么看出它在起作用，
-以及它花掉多少复杂度预算。**行为的唯一来源仍是各自的 `SKILL.md`**，本页不承载行为。
+这是给人看的入口：每个 Skill 替你做什么、什么时候会用到、你怎么看出它在起作用，
+以及它花掉多少复杂度预算。`SKILL.md` 是给 Agent 执行的行为合同，优先保证触发、硬门、分支和退出完整，不是按顺序阅读的教程；只有维护或审查行为时才需要下钻。
 
 当前 12 个 Skill，共 208,420 字节，占复杂度预算 99.7%。
 
@@ -33,7 +33,7 @@
 
 **什么会让它失效** GitHub 原生 sub-issue 关系、Project v2 字段写入语义或 Issue 关闭权限模型发生变化，使正文描述的建图与状态判定不再可执行。
 
-所属 Plugin `github-collaboration` `0.3.18`｜体积 60.1 KB（占预算 29.5%）｜上次复核 2026-08-15｜正文 [`plugins/github-collaboration/skills/issue-workflow/SKILL.md`](../plugins/github-collaboration/skills/issue-workflow/SKILL.md)
+所属 Plugin `github-collaboration` `0.3.18`｜体积 60.1 KB（占预算 29.5%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/github-collaboration/skills/issue-workflow/SKILL.md`](../plugins/github-collaboration/skills/issue-workflow/SKILL.md)
 
 ## adaptive-problem-solving
 
@@ -45,7 +45,7 @@
 
 **什么会让它失效** 方法登记面的证据等级分布与登记面 README 声明不符；或三端 description 可见预算的实测基线（2026-08-11 测得 1000 UTF-8 字节）被新的实测推翻。
 
-所属 Plugin `adaptive-problem-solving` `0.2.11`｜体积 22.0 KB（占预算 10.8%）｜上次复核 2026-08-15｜正文 [`plugins/adaptive-problem-solving/skills/adaptive-problem-solving/SKILL.md`](../plugins/adaptive-problem-solving/skills/adaptive-problem-solving/SKILL.md)
+所属 Plugin `adaptive-problem-solving` `0.2.11`｜体积 22.0 KB（占预算 10.8%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/adaptive-problem-solving/skills/adaptive-problem-solving/SKILL.md`](../plugins/adaptive-problem-solving/skills/adaptive-problem-solving/SKILL.md)
 
 ## orchestrated-collaboration
 
@@ -57,7 +57,7 @@
 
 **什么会让它失效** 所选协调后端（当前 orca orchestration）的 Run／Task／Dispatch 语义或标准释放回执格式变化；或其唯一原则源 agent-control/authority/05-resource-operations.md 的资源投入原则变化，使 R1–R6 派发门失去依据。
 
-所属 Plugin `orchestrated-collaboration` `0.2.6`｜体积 21.2 KB（占预算 10.4%）｜上次复核 2026-08-15｜正文 [`plugins/orchestrated-collaboration/skills/orchestrated-collaboration/SKILL.md`](../plugins/orchestrated-collaboration/skills/orchestrated-collaboration/SKILL.md)
+所属 Plugin `orchestrated-collaboration` `0.2.6`｜体积 21.2 KB（占预算 10.4%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/orchestrated-collaboration/skills/orchestrated-collaboration/SKILL.md`](../plugins/orchestrated-collaboration/skills/orchestrated-collaboration/SKILL.md)
 
 ## self-improvement
 
@@ -69,7 +69,7 @@
 
 **什么会让它失效** 入口、Skill、任务记录三个改进承载面之一消失或职责变更，使路由判据指向不存在的去向。
 
-所属 Plugin `self-improvement` `0.1.6`｜体积 16.3 KB（占预算 8.0%）｜上次复核 2026-08-15｜正文 [`plugins/self-improvement/skills/self-improvement/SKILL.md`](../plugins/self-improvement/skills/self-improvement/SKILL.md)
+所属 Plugin `self-improvement` `0.1.6`｜体积 16.3 KB（占预算 8.0%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/self-improvement/skills/self-improvement/SKILL.md`](../plugins/self-improvement/skills/self-improvement/SKILL.md)
 
 ## pr-integration
 
@@ -81,7 +81,7 @@
 
 **什么会让它失效** 分支保护、合并策略或 force-push 的 lease 保护语义变化，使正文的分支维护步骤不再安全。
 
-所属 Plugin `github-collaboration` `0.3.18`｜体积 15.6 KB（占预算 7.7%）｜上次复核 2026-08-15｜正文 [`plugins/github-collaboration/skills/pr-integration/SKILL.md`](../plugins/github-collaboration/skills/pr-integration/SKILL.md)
+所属 Plugin `github-collaboration` `0.3.18`｜体积 15.6 KB（占预算 7.7%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/github-collaboration/skills/pr-integration/SKILL.md`](../plugins/github-collaboration/skills/pr-integration/SKILL.md)
 
 ## issue-delivery
 
@@ -93,7 +93,7 @@
 
 **什么会让它失效** PR 创建、审阅请求或必需检查的语义变化，使交付前核对无法只从远端事实判定。
 
-所属 Plugin `github-collaboration` `0.3.18`｜体积 15.2 KB（占预算 7.4%）｜上次复核 2026-08-15｜正文 [`plugins/github-collaboration/skills/issue-delivery/SKILL.md`](../plugins/github-collaboration/skills/issue-delivery/SKILL.md)
+所属 Plugin `github-collaboration` `0.3.18`｜体积 15.2 KB（占预算 7.4%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/github-collaboration/skills/issue-delivery/SKILL.md`](../plugins/github-collaboration/skills/issue-delivery/SKILL.md)
 
 ## objective-to-issues
 
@@ -105,7 +105,7 @@
 
 **什么会让它失效** 七类标题前缀闭集、两个 label 维度或经营总账 Project 的字段定义被负责人修改，使创建骨架的硬校验与实际仓库不符。
 
-所属 Plugin `github-collaboration` `0.3.18`｜体积 13.0 KB（占预算 6.4%）｜上次复核 2026-08-15｜正文 [`plugins/github-collaboration/skills/objective-to-issues/SKILL.md`](../plugins/github-collaboration/skills/objective-to-issues/SKILL.md)
+所属 Plugin `github-collaboration` `0.3.18`｜体积 13.0 KB（占预算 6.4%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/github-collaboration/skills/objective-to-issues/SKILL.md`](../plugins/github-collaboration/skills/objective-to-issues/SKILL.md)
 
 ## operating-ledger-maintenance
 
@@ -117,7 +117,7 @@
 
 **什么会让它失效** agent-control/authority/10-operating-ledger.md 的事项结构或状态分级变化，使维护动作指向不存在的字段。
 
-所属 Plugin `github-collaboration` `0.3.18`｜体积 11.5 KB（占预算 5.6%）｜上次复核 2026-08-15｜正文 [`plugins/github-collaboration/skills/operating-ledger-maintenance/SKILL.md`](../plugins/github-collaboration/skills/operating-ledger-maintenance/SKILL.md)
+所属 Plugin `github-collaboration` `0.3.18`｜体积 11.5 KB（占预算 5.6%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/github-collaboration/skills/operating-ledger-maintenance/SKILL.md`](../plugins/github-collaboration/skills/operating-ledger-maintenance/SKILL.md)
 
 ## resource-observability
 
@@ -129,7 +129,7 @@
 
 **什么会让它失效** orca account list --json 的返回结构变化：顶层 ok、result.rateLimits.claude／codex 的 status 与 updatedAt，或 usedPercent／windowMinutes／resetsAt／rateLimitResetCredits 这些窗口字段不再按 Skill 正文描述提供。
 
-所属 Plugin `resource-observability` `0.2.4`｜体积 9.7 KB（占预算 4.8%）｜上次复核 2026-08-15｜正文 [`plugins/resource-observability/skills/resource-observability/SKILL.md`](../plugins/resource-observability/skills/resource-observability/SKILL.md)
+所属 Plugin `resource-observability` `0.2.4`｜体积 9.7 KB（占预算 4.8%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/resource-observability/skills/resource-observability/SKILL.md`](../plugins/resource-observability/skills/resource-observability/SKILL.md)
 
 ## issue-contract-compaction
 
@@ -141,7 +141,7 @@
 
 **什么会让它失效** GitHub 返回的时间标量精度或字段序列化形态变化，使「优先比较原始序列化标量」不再能区分真实变更。
 
-所属 Plugin `github-collaboration` `0.3.18`｜体积 8.6 KB（占预算 4.2%）｜上次复核 2026-08-15｜正文 [`plugins/github-collaboration/skills/issue-contract-compaction/SKILL.md`](../plugins/github-collaboration/skills/issue-contract-compaction/SKILL.md)
+所属 Plugin `github-collaboration` `0.3.18`｜体积 8.6 KB（占预算 4.2%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/github-collaboration/skills/issue-contract-compaction/SKILL.md`](../plugins/github-collaboration/skills/issue-contract-compaction/SKILL.md)
 
 ## knowledge-maintenance
 
@@ -153,7 +153,7 @@
 
 **什么会让它失效** agent-control/authority/01-knowledge.md 的两道准入门或可信门八项条件发生变化。
 
-所属 Plugin `knowledge-maintenance` `0.1.3`｜体积 6.3 KB（占预算 3.1%）｜上次复核 2026-08-15｜正文 [`plugins/knowledge-maintenance/skills/knowledge-maintenance/SKILL.md`](../plugins/knowledge-maintenance/skills/knowledge-maintenance/SKILL.md)
+所属 Plugin `knowledge-maintenance` `0.1.3`｜体积 6.3 KB（占预算 3.1%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/knowledge-maintenance/skills/knowledge-maintenance/SKILL.md`](../plugins/knowledge-maintenance/skills/knowledge-maintenance/SKILL.md)
 
 ## grilling
 
@@ -165,4 +165,4 @@
 
 **什么会让它失效** 明示同意门被取消，或运行端改为按关键词自动进入长期盘问。
 
-所属 Plugin `grilling` `0.1.2`｜体积 3.9 KB（占预算 1.9%）｜上次复核 2026-08-15｜正文 [`plugins/grilling/skills/grilling/SKILL.md`](../plugins/grilling/skills/grilling/SKILL.md)
+所属 Plugin `grilling` `0.1.2`｜体积 3.9 KB（占预算 1.9%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/grilling/skills/grilling/SKILL.md`](../plugins/grilling/skills/grilling/SKILL.md)

@@ -55,7 +55,7 @@
 
 ## 当前来源水位
 
-- 关联 `agent-control#70` 的方法卡 schema、P1–P8 类型学、五层承载与 70-D1／70-D2 决定回执；核验时间：2026-08-11。
+- 旧仓 [Eridanus117/agent-control#70（方法模型与方法库的目标形态）](https://github.com/Eridanus117/agent-control/issues/70) 的方法卡 schema、P1–P8 类型学、五层承载与 70-D1／70-D2 决定回执；核验时间：2026-08-11。当前问题求解诉求已迁至 [zaurakworks/agent-control#4](https://github.com/zaurakworks/agent-control/issues/4)，两者编号不可互换。
 - 仓内 APS `0.2.8`、`grilling` `0.1.0`、`self-improvement` `0.1.4`；首批登记面基线核验提交：`a11176fddc70c50f32984cfef9da18d8768370fa`。
 - [关联 Eridanus117/agent-control#85（Premortem 方法卡实战）的证据升级评论](https://github.com/Eridanus117/agent-control/issues/85#issuecomment-5258420709)与[关联 Eridanus117/agent-control#86（关键假设检查方法卡实战）的自然任务评论](https://github.com/Eridanus117/agent-control/issues/86#issuecomment-5258418149)；本批只支持两张卡在原适用边界升为 M1。
 - [关联 Eridanus117/agent-control#92（红队方法卡实战）的红队评论](https://github.com/Eridanus117/agent-control/issues/92#issuecomment-5258711541)与[收口回执](https://github.com/Eridanus117/agent-control/issues/92#issuecomment-5258729826)；本批只支持 `red-team-analysis` 在私域迁移链路只读安全审查边界升为 M1。
