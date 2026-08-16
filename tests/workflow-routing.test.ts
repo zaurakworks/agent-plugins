@@ -579,13 +579,28 @@ assert.ok(
   body.get('self-improvement')!.includes('./references/iteration-receipt.md'),
   'self-improvement 未承载迭代回执 reference',
 );
+const adaptiveSkillRoot = join(
+  pluginsRoot,
+  'adaptive-problem-solving',
+  'skills',
+  'adaptive-problem-solving',
+);
+const apsReferenceRoot = join(adaptiveSkillRoot, 'references');
+const apsBoundedResearch = read(join(apsReferenceRoot, 'bounded-research.md'));
+const apsAdversarialReview = read(join(apsReferenceRoot, 'adversarial-review.md'));
+const apsMinimumExperiment = read(join(apsReferenceRoot, 'minimum-experiment.md'));
+const apsPreActionGates = read(join(apsReferenceRoot, 'pre-action-gates.md'));
+const apsMilestoneAcceptance = read(join(apsReferenceRoot, 'milestone-acceptance.md'));
 assert.ok(
-  body.get('adaptive-problem-solving')!.includes('其 `references/iteration-receipt.md`'),
-  'APS 未按需引用迭代回执',
+  body.get('adaptive-problem-solving')!.includes('`self-improvement`') &&
+    body.get('adaptive-problem-solving')!.includes('`references/iteration-receipt.md`'),
+  'APS 主控制器未按需引用迭代回执',
 );
 assert.ok(
-  body.get('adaptive-problem-solving')!.includes('第一轮发现仍是候选'),
-  'APS 攻防段未保留“发现先裁决”的证据边界',
+  apsAdversarialReview.includes('`self-improvement`') &&
+    apsAdversarialReview.includes('`references/iteration-receipt.md`') &&
+    apsAdversarialReview.includes('第一轮发现仍是候选'),
+  'APS 攻防分支未保留迭代回执指针与“发现先裁决”边界',
 );
 assert.ok(
   body.get('knowledge-maintenance')!.includes('其 `references/iteration-receipt.md`'),
@@ -608,14 +623,7 @@ for (const needle of [
 
 // ---------- 1.5. APS 方法登记面保持可发现、完整且不越过证据／同意门 ----------
 
-const methodRegistryRoot = join(
-  pluginsRoot,
-  'adaptive-problem-solving',
-  'skills',
-  'adaptive-problem-solving',
-  'references',
-  'method-registry',
-);
+const methodRegistryRoot = join(apsReferenceRoot, 'method-registry');
 const methodRegistryReadme = read(join(methodRegistryRoot, 'README.md'));
 const methodIndex = read(join(methodRegistryRoot, 'INDEX.md'));
 const methodCardsRoot = join(methodRegistryRoot, 'cards');
@@ -734,23 +742,71 @@ assert.ok(
 );
 const multiPerspectiveCard = read(join(methodCardsRoot, 'multi-perspective-adversarial-review.md'));
 const adaptiveSkillBody = body.get('adaptive-problem-solving')!;
+const apsBranchProtocols = [
+  apsBoundedResearch,
+  apsAdversarialReview,
+  apsMinimumExperiment,
+  apsPreActionGates,
+  apsMilestoneAcceptance,
+];
 assert.ok(
-  Buffer.byteLength(adaptiveSkillBody, 'utf8') <= 22_850,
-  '65-D1=A 要求 APS 主 Skill 以置换方式实施，LF 规范化后不得超过 22850 UTF-8 字节基线',
+  Buffer.byteLength(adaptiveSkillBody, 'utf8') <= 10_000,
+  'APS 主控制器必须保持在 10 KB 内，分支协议按需加载',
 );
 assert.ok(
-  adaptiveSkillBody.includes('下文是唯一执行定义') &&
-    adaptiveSkillBody.includes('第一轮至少两个独立攻击视角') &&
-    adaptiveSkillBody.includes('第二轮至少两个未参与者') &&
-    adaptiveSkillBody.includes('下限为四个独立 Agent／Session'),
-  'APS 路线 4 必须独占执行定义，并固定两个攻击者＋两个裁决者的四 Agent 下限',
+  Buffer.byteLength(adaptiveSkillBody + apsBranchProtocols.join(''), 'utf8') <= 22_850,
+  'APS 主控制器与五份分支协议合计不得超过拆分前 22850 字节基线',
+);
+for (const file of [
+  'bounded-research.md',
+  'adversarial-review.md',
+  'minimum-experiment.md',
+  'pre-action-gates.md',
+  'milestone-acceptance.md',
+]) {
+  assert.ok(adaptiveSkillBody.includes(`references/${file}`), `APS 主控制器缺少分支指针 ${file}`);
+}
+for (const branchOnly of [
+  '研究层',
+  '第一轮至少两个独立攻击视角',
+  '实验卡（开始前写死）',
+  '**G1｜实测或未知。**',
+  '实现完成 → 当前交付验收 → 样本有效 → 产品采用 → 长期依赖',
+]) {
+  assert.ok(!adaptiveSkillBody.includes(branchOnly), `APS 主控制器不应内联分支正文：${branchOnly}`);
+}
+assert.ok(
+  apsBoundedResearch.includes('研究层') &&
+    apsBoundedResearch.includes('选项层') &&
+    apsBoundedResearch.includes('计划层'),
+  'APS 受限调研分支必须保留三层证据分区',
+);
+assert.ok(
+  apsAdversarialReview.includes('本文件是该分支的唯一执行定义') &&
+    apsAdversarialReview.includes('第一轮至少两个独立攻击视角') &&
+    apsAdversarialReview.includes('第二轮至少两个未参与者') &&
+    apsAdversarialReview.includes('下限为四个独立 Agent／Session'),
+  'APS 攻防分支必须独占执行定义，并固定两个攻击者＋两个裁决者的四 Agent 下限',
+);
+assert.ok(
+  apsMinimumExperiment.includes('实验卡（开始前写死）') &&
+    apsMinimumExperiment.includes('开始后只能作废重登') &&
+    apsMinimumExperiment.includes('不得用最小实验标准验收产品交付'),
+  'APS 最小实验分支必须保留预注册与完整交付边界',
+);
+assert.ok(
+  apsMilestoneAcceptance.includes('父目标贡献') &&
+    apsMilestoneAcceptance.includes('能力回退') &&
+    apsMilestoneAcceptance.includes('实现完成 → 当前交付验收 → 样本有效 → 产品采用 → 长期依赖'),
+  'APS 里程碑验收分支必须保留父目标、回退与证据阶梯',
 );
 assert.ok(
   multiPerspectiveCard.includes('能力证据等级：M0 实现完成') &&
     multiPerspectiveCard.includes('/issues/66') &&
     multiPerspectiveCard.includes('未达到当前至少两名裁决者的下限') &&
-    multiPerspectiveCard.includes('本卡不复制轮次、评论结构、裁决或停止步骤'),
-  'multi-perspective-adversarial-review 必须如实保留 M0，并只指向 APS 执行定义',
+    multiPerspectiveCard.includes('本卡不复制轮次、评论结构、裁决或停止步骤') &&
+    multiPerspectiveCard.includes('../../adversarial-review.md'),
+  'multi-perspective-adversarial-review 必须如实保留 M0，并只指向 APS 攻防协议',
 );
 const problemModelingCard = read(join(methodCardsRoot, 'aps-problem-modeling.md'));
 assert.ok(
@@ -1093,27 +1149,23 @@ const g3WithoutAuthorization = structuredClone(g3Eligible) as G3GateCase;
 delete (g3WithoutAuthorization as Partial<G3GateCase>).alternativeAuthorization;
 assert.throws(() => resolveGateCase(g3WithoutAuthorization), /G3 缺少 alternativeAuthorization/u, '删除 G3 替代授权字段时必须失败');
 
-const gateHeading = '### 行动前事实与决定价值双门';
-assert.deepEqual(
-  [...body.entries()].filter(([, text]) => text.includes(gateHeading)).map(([skill]) => skill),
-  ['adaptive-problem-solving'],
-  '行动前门不得在负责人协议或经营投影形成第三承载面',
-);
+const gateHeading = '# 行动前事实与决定价值门';
+assert.ok(apsPreActionGates.includes(gateHeading), '行动前门 reference 缺少唯一规范标题');
 assert.ok(
-  cf6.includes('先完整读取 `adaptive-problem-solving` 第八节“行动前事实与决定价值双门”') &&
+  cf6.includes('先完整读取 `adaptive-problem-solving` 的 `references/pre-action-gates.md`') &&
     !cf6.includes('下一动作、授权边界、风险暴露、资源投入或总成本、不可逆或有时限的机会'),
-  'CF-6 必须只路由到 APS G3，不复制五维与经济判据',
+  'CF-6 必须只路由到 APS pre-action-gates G3，不复制五维与经济判据',
 );
 const p02LifecycleSection = body.get('orchestrated-collaboration')!.split('## 八、处理交付并独立验收')[1];
 for (const marker of ['**G1｜实测或未知。**', '**G2｜无回复五维反事实。**', '**G3｜三方审阅经济门。**']) {
+  assert.ok(apsPreActionGates.includes(marker), `P1-1 reference 缺少规范正文 ${marker}`);
   assert.deepEqual(
     [...body.entries()].filter(([, text]) => text.includes(marker)).map(([skill]) => skill),
-    ['adaptive-problem-solving'],
-    `P1-1 规范正文 ${marker} 只能存在于 APS`,
+    [],
+    `P1-1 规范正文 ${marker} 不得内联到常驻 Skill`,
   );
   assert.ok(!p02LifecycleSection.includes(marker), `P1-1 不得侵入 P0-2 可重入收口段：${marker}`);
 }
-assert.ok(Buffer.byteLength(adaptiveSkillBody, 'utf8') <= 22_848, 'P1-1 必须守住 APS 0.2.8 的 22848 字节正文基线');
 assert.ok(
   Buffer.byteLength(body.get('orchestrated-collaboration')!, 'utf8') <= 21_823,
   'P1-1 路由必须守住 P0-2 落地后的 orchestrated-collaboration 21823 字节正文基线',
@@ -1124,7 +1176,7 @@ assert.ok(
   cf5Card.includes('至少四个独立 Agent／Session') &&
     cf5Card.includes('角色拓扑与所有权') &&
     cf5Card.includes('交付适配') &&
-    cf5Card.includes('APS 路线 4') &&
+    cf5Card.includes('APS 攻防协议') &&
     cf5Card.includes('能力证据等级：M0 实现完成') &&
     collaborationShapeIndex.includes('| M0 | 高影响模型反证 |'),
   'CF-5 必须只承载与 APS 下限一致的角色拓扑、所有权和交付适配',

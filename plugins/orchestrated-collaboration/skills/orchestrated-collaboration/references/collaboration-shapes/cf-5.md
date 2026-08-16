@@ -15,7 +15,7 @@
 
 ## 执行定义
 - 角色拓扑与所有权：至少四个独立 Agent／Session；首轮至少两个攻击角色，次轮至少两个未参与首轮的裁决角色，其中一名裁决者单写综合。
-- 交付适配：每个角色一条自足 Issue 评论，协调者按来源链接综合；轮次、必答结构、裁决与停止条件只执行[APS 路线 4](../../../../../adaptive-problem-solving/skills/adaptive-problem-solving/SKILL.md#路线-4-的可执行形状多视角攻防)。
+- 交付适配：每个角色一条自足 Issue 评论，协调者按来源链接综合；轮次、必答结构、裁决与停止条件只执行[APS 攻防协议](../../../../../adaptive-problem-solving/skills/adaptive-problem-solving/references/adversarial-review.md)。
 
 ## 成本画像
 - 墙钟：1–2 波次；Token／工具调用：很高；协调 Agent：至少 4；负责人问询：通常 0；维护成本：中高。
