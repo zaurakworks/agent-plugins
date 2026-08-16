@@ -6,14 +6,14 @@
 这是给人看的入口：每个 Skill 替你做什么、什么时候会用到、你怎么看出它在起作用，
 以及它花掉多少复杂度预算。`SKILL.md` 是给 Agent 执行的行为合同，优先保证触发、硬门、分支和退出完整，不是按顺序阅读的教程；只有维护或审查行为时才需要下钻。
 
-当前 12 个 Skill，共 205,354 字节，占复杂度预算 98.3%。
+当前 13 个 Skill，共 208,913 字节，占复杂度预算 100.0%。
 
 | Skill | 版本 | 体积 | 占预算 | 上次复核 |
 | --- | --- | ---: | ---: | --- |
 | [issue-workflow](#issue-workflow) | 0.3.18 | 60.2 KB | 29.5% | 2026-08-15 |
 | [orchestrated-collaboration](#orchestrated-collaboration) | 0.2.6 | 21.2 KB | 10.4% | 2026-08-15 |
 | [adaptive-problem-solving](#adaptive-problem-solving) | 0.2.12 | 19.0 KB | 9.3% | 2026-08-15 |
-| [self-improvement](#self-improvement) | 0.1.6 | 16.3 KB | 8.0% | 2026-08-15 |
+| [self-improvement](#self-improvement) | 0.1.7 | 16.0 KB | 7.8% | 2026-08-15 |
 | [pr-integration](#pr-integration) | 0.3.18 | 15.6 KB | 7.7% | 2026-08-15 |
 | [issue-delivery](#issue-delivery) | 0.3.18 | 15.2 KB | 7.4% | 2026-08-15 |
 | [objective-to-issues](#objective-to-issues) | 0.3.18 | 13.0 KB | 6.4% | 2026-08-15 |
@@ -22,6 +22,7 @@
 | [issue-contract-compaction](#issue-contract-compaction) | 0.3.18 | 8.6 KB | 4.2% | 2026-08-15 |
 | [knowledge-maintenance](#knowledge-maintenance) | 0.1.3 | 6.3 KB | 3.1% | 2026-08-15 |
 | [grilling](#grilling) | 0.1.2 | 3.9 KB | 1.9% | 2026-08-15 |
+| [skill-maintenance](#skill-maintenance) | 0.1.0 | 3.8 KB | 1.9% | 2026-08-16 |
 
 ## issue-workflow
 
@@ -69,7 +70,7 @@
 
 **什么会让它失效** 入口、Skill、任务记录三个改进承载面之一消失或职责变更，使路由判据指向不存在的去向。
 
-所属 Plugin `self-improvement` `0.1.6`｜体积 16.3 KB（占预算 8.0%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/self-improvement/skills/self-improvement/SKILL.md`](../plugins/self-improvement/skills/self-improvement/SKILL.md)
+所属 Plugin `self-improvement` `0.1.7`｜体积 16.0 KB（占预算 7.8%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/self-improvement/skills/self-improvement/SKILL.md`](../plugins/self-improvement/skills/self-improvement/SKILL.md)
 
 ## pr-integration
 
@@ -166,3 +167,15 @@
 **什么会让它失效** 明示同意门被取消，或运行端改为按关键词自动进入长期盘问。
 
 所属 Plugin `grilling` `0.1.2`｜体积 3.9 KB（占预算 1.9%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/grilling/skills/grilling/SKILL.md`](../plugins/grilling/skills/grilling/SKILL.md)
+
+## skill-maintenance
+
+**它替你做什么** 创建、审计、拆分、升级或退役 Skill 时，把行为合同、调用者、版本、预算和验证一次维护完整。
+
+**什么时候用** 已经确定要维护某个 Skill 时；尚未决定行为该放哪里时不用。
+
+**你怎么知道它在起作用** 改动前有行为判据，改动后没有旧调用者，版本、生成物、预算、验证和独立审查能相互对上。
+
+**什么会让它失效** Skill 的发现入口、版本声明、复杂度预算、生成物或发布／退役工具发生变化，使正文盘点面和 clean cutover 步骤不再覆盖真实运行路径。
+
+所属 Plugin `skill-maintenance` `0.1.0`｜体积 3.8 KB（占预算 1.9%）｜上次复核 2026-08-16｜Agent 行为合同（维护／审查时读取）[`plugins/skill-maintenance/skills/skill-maintenance/SKILL.md`](../plugins/skill-maintenance/skills/skill-maintenance/SKILL.md)

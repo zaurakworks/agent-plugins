@@ -1349,6 +1349,7 @@ const requiredDescriptionTriggers = new Map<string, string[]>([
   ['operating-ledger-maintenance', ['跨 Session 保留', '分开维护执行、诉求和证据状态', '当前、明确、未消费', '下一责任人与动作', '普通任务、轮询、自动派发、未授权写入或历史迁移']],
   ['pr-integration', ['当前 head', 'required／optional checks', 'Draft → ready', 'lease', '明确授权才合并', '不判生命周期']],
   ['grilling', ['用户直接要求', '明确接受建议', '复杂性、关键词或 Agent 偏好不构成同意']],
+  ['skill-maintenance', ['创建、审计、修正、拆分、升级、迁移或退役 Skill', '合同／入口已漂移', '普通业务维护', '承载位置未定']],
   ['knowledge-maintenance', ['多来源调研', '可重复实验', '权威／Agent 配置／重要决定', '复用、复核、更新当前知识', '价值门和可信门', '低成本一次性事实']],
   ['orchestrated-collaboration', ['明确要求多 Agent／多 Session／跨 Provider 协作', '已授权委派', '共享写入碰撞', '排他所有权', '唯一协调者', '只冻结重叠', '协调者参与高价值多交付件能力的拆分或设计', '未参与者复核父目标', '动态读 orchestration 指南', '不要因复杂、额度或空闲 Agent 擅自并行', '不把试用变成长期依赖']],
   ['resource-observability', ['账户额度', '重置时间', '重置券', '单 Session Token', '启动、并行、降级、延后或停止', 'Orca 账户快照', '固定 ccusage', '轮询、自动调度／消费权益']],

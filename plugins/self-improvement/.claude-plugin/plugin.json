@@ -1,6 +1,6 @@
 {
   "name": "self-improvement",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Turn observed Agent drift and reusable corrections into bounded prompt or Skill improvements.",
   "author": {
     "name": "zaurakworks"
