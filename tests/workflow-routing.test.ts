@@ -818,6 +818,32 @@ assert.ok(
   roiOptionsCard.includes('不仅字段齐全') && roiOptionsCard.includes('总周期、有用吞吐与负责人注意力'),
   'aps-roi-options 未校准代理指标验收',
 );
+
+const apsCardSourcePointers: Record<string, string> = {
+  'aps-alignment-questioning.md': '[APS 主合同](../../../SKILL.md)',
+  'aps-bounded-research.md': '[APS 受限调研协议](../../bounded-research.md)',
+  'aps-execution-configuration-check.md': '[APS 主合同](../../../SKILL.md)',
+  'aps-minimum-experiment.md': '[APS 最小实验协议](../../minimum-experiment.md)',
+  'aps-parent-goal-acceptance.md': '[APS 里程碑验收协议](../../milestone-acceptance.md)',
+  'aps-problem-modeling.md': '[APS 主合同](../../../SKILL.md)',
+  'aps-roi-options.md': '[APS 主合同](../../../SKILL.md)',
+  'preregistered-experiment-card.md': '[APS 最小实验协议](../../minimum-experiment.md)',
+};
+for (const [file, pointer] of Object.entries(apsCardSourcePointers)) {
+  assert.ok(
+    read(join(methodCardsRoot, file)).includes(pointer),
+    `${file} 必须指向当前 APS 主合同或按需分支协议`,
+  );
+}
+const obsoleteApsSectionSource =
+  /来源：APS (?:`SKILL\.md` )?第[一二三四五六七八九十]+节|来源：APS 路线 [1-6]|按 APS 第[一二三四五六七八九十]+节|失效条件：APS 路线 [1-6]/;
+for (const file of readdirSync(methodCardsRoot).filter((name) => name.endsWith('.md'))) {
+  assert.doesNotMatch(
+    read(join(methodCardsRoot, file)),
+    obsoleteApsSectionSource,
+    `${file} 不得以已重排的 APS 章节号或旧路线号作为来源`,
+  );
+}
 const comparativeExperimentCard = read(join(methodCardsRoot, 'comparative-experiment.md'));
 assert.ok(
     comparativeExperimentCard.includes('能力证据等级：M1 当前交付验收') &&
