@@ -292,7 +292,11 @@
     "baseline": {
       "observedAt": "2026-08-15",
       "skills": 12,
-      "corpusUtf8Bytes": 208420
+      "corpusUtf8Bytes": 208420,
+      "limits": {
+        "maxSkills": 12,
+        "corpusMaxUtf8Bytes": 209000
+      }
     }
   },
   "pluginVersions": {
