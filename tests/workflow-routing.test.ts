@@ -2598,6 +2598,12 @@ assert.equal(
   renderSkillsOverview(),
   'docs/skills-overview.md 与来源不一致：它是生成产物，请跑 node scripts/skills-overview.ts --write，不要手改',
 );
+assert.ok(
+  read(overviewPath).includes('这是给人看的入口') &&
+    read(overviewPath).includes('`SKILL.md` 是给 Agent 执行的行为合同') &&
+    read(overviewPath).includes('不是按顺序阅读的教程'),
+  '负责人选型面必须区分人类入口与 Agent 行为合同',
+);
 
 // ---------- 9. README 的版本总览不能落后于 manifest ----------
 

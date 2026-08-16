@@ -37,7 +37,7 @@
 ## 有效性证据
 - 来源等级：本次直接验证；能力证据等级：M1 当前交付验收；适用环境：运行底座依赖的有界产品与实施取舍。
 - 成功样本：[关联 Eridanus117/agent-control#112（Orca 依赖三方向 ROI）的交付评论](https://github.com/Eridanus117/agent-control/issues/112#issuecomment-5261062363)；样本摘要：在负责人点名使用本卡后，按父目标收益、建设维护成本、退出成本、供应链风险、可逆性、总周期、有用吞吐与负责人注意力比较上游优先、Fork 与后端抽象三方向，并以中高置信推荐维持上游优先、给出最强反方和两条可观察翻转路径；后续回执没有推翻三方向排序。
-- 失败样本：[关联 Eridanus117/agent-control#93（问题类型学首批真实样本校准）的样本 17](https://github.com/Eridanus117/agent-control/issues/93#issuecomment-5258734377)记录关联 #70（方法模型与方法库目标形态）虽具备完整选项、反方与翻转条件，却因把“渐进”当默认而给出错误推荐；[关联 Eridanus117/agent-control#112（Orca 依赖三方向 ROI）的决定回执](https://github.com/Eridanus117/agent-control/issues/112#issuecomment-5261160382)进一步确认，排序虽成立，把“不作决定也会继续”的维持现状推荐包装成负责人决定请求，仍会无谓占用负责人注意力。未知：本次排序在翻转条件出现后能否及时换路，以及不同底座或非平台取舍能否复现收益。
+- 失败样本：[关联 Eridanus117/agent-control#93（问题类型学首批真实样本校准）的样本 17](https://github.com/Eridanus117/agent-control/issues/93#issuecomment-5258734377)记录旧仓 [Eridanus117/agent-control#70（方法模型与方法库的目标形态）](https://github.com/Eridanus117/agent-control/issues/70)虽具备完整选项、反方与翻转条件，却因把“渐进”当默认而给出错误推荐；[关联 Eridanus117/agent-control#112（Orca 依赖三方向 ROI）的决定回执](https://github.com/Eridanus117/agent-control/issues/112#issuecomment-5261160382)进一步确认，排序虽成立，把“不作决定也会继续”的维持现状推荐包装成负责人决定请求，仍会无谓占用负责人注意力。未知：本次排序在翻转条件出现后能否及时换路，以及不同底座或非平台取舍能否复现收益。
 
 ## 维护
 - 失效条件：APS 的默认 ROI 目标或负责人决定边界改变；下次最少复核：首次命中 Fork／抽象翻转条件，或下一次完整字段与实际推荐发生分歧时，核对代理指标与决定价值门。

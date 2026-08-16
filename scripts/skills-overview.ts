@@ -64,8 +64,8 @@ export function render(): string {
     '',
     '# Skill 选型面',
     '',
-    '写给负责人：每个 Skill 替你做什么、什么时候会用到、你怎么看出它在起作用，',
-    '以及它花掉多少复杂度预算。**行为的唯一来源仍是各自的 `SKILL.md`**，本页不承载行为。',
+    '这是给人看的入口：每个 Skill 替你做什么、什么时候会用到、你怎么看出它在起作用，',
+    '以及它花掉多少复杂度预算。`SKILL.md` 是给 Agent 执行的行为合同，优先保证触发、硬门、分支和退出完整，不是按顺序阅读的教程；只有维护或审查行为时才需要下钻。',
     '',
     `当前 ${rows.length} 个 Skill，共 ${rows.reduce((s, r) => s + r.bytes, 0).toLocaleString('en-US')} 字节，` +
       `占复杂度预算 ${((rows.reduce((s, r) => s + r.bytes, 0) / budget) * 100).toFixed(1)}%。`,
@@ -104,7 +104,7 @@ export function render(): string {
       `所属 Plugin \`${row.plugin}\` \`${manifest.pluginVersions[row.plugin]}\`｜` +
         `体积 ${(row.bytes / 1024).toFixed(1)} KB（占预算 ${row.share.toFixed(1)}%）｜` +
         `上次复核 ${life.suspect ? '**存疑**' : (life.lastVerified ?? '**从未**')}｜` +
-        `正文 [\`plugins/${row.plugin}/skills/${row.skill}/SKILL.md\`](../plugins/${row.plugin}/skills/${row.skill}/SKILL.md)`,
+        `Agent 行为合同（维护／审查时读取）[\`plugins/${row.plugin}/skills/${row.skill}/SKILL.md\`](../plugins/${row.plugin}/skills/${row.skill}/SKILL.md)`,
       '',
     );
   }
