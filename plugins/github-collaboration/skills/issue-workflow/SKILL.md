@@ -187,7 +187,7 @@ adaptive-problem-solving：选出当前最值得投入的瓶颈并说明为什�
 
 ### 负责人决定协议：命中才加载
 
-本协议只处理前文已经判定为需要负责人的门。形成新的负责人动作前先执行 `adaptive-problem-solving` 第八节 G2，无回复时五维均无差异就不形成动作；转呈、解析、修正或消费既有决定不借 G2 重开已经存在的门。形成、转呈、解析、修正或消费决定以前，**必须完整读取** [`references/owner-decision-protocol.md`](./references/owner-decision-protocol.md)；在可信负责人主体校验通过前不解析授权，在稳定 Issue 前缀决定编号与回执落盘前不执行。若请求要置顶写入 Issue 正文，还必须进入 `issue-contract-compaction`，先满足正文排他所有权、远端恢复快照与最终重读。
+本协议只处理前文已经判定为需要负责人的门。形成新的负责人动作前先读取 `adaptive-problem-solving` 的 `references/pre-action-gates.md` 并执行 G2，无回复时五维均无差异就不形成动作；转呈、解析、修正或消费既有决定不借 G2 重开已经存在的门。形成、转呈、解析、修正或消费决定以前，**必须完整读取** [`references/owner-decision-protocol.md`](./references/owner-decision-protocol.md)；在可信负责人主体校验通过前不解析授权，在稳定 Issue 前缀决定编号与回执落盘前不执行。若请求要置顶写入 Issue 正文，还必须进入 `issue-contract-compaction`，先满足正文排他所有权、远端恢复快照与最终重读。
 
 该 reference 返回决定回执、当前负责人动作、生命周期意图及下一责任人／动作；随后必须读取第九节指向的生命周期 reference 完成同一收口。本核心不复制自然回复语法、三律、回执模板或历史事故。
 

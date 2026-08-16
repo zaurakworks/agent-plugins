@@ -6,13 +6,13 @@
 这是给人看的入口：每个 Skill 替你做什么、什么时候会用到、你怎么看出它在起作用，
 以及它花掉多少复杂度预算。`SKILL.md` 是给 Agent 执行的行为合同，优先保证触发、硬门、分支和退出完整，不是按顺序阅读的教程；只有维护或审查行为时才需要下钻。
 
-当前 12 个 Skill，共 208,420 字节，占复杂度预算 99.7%。
+当前 12 个 Skill，共 205,354 字节，占复杂度预算 98.3%。
 
 | Skill | 版本 | 体积 | 占预算 | 上次复核 |
 | --- | --- | ---: | ---: | --- |
-| [issue-workflow](#issue-workflow) | 0.3.18 | 60.1 KB | 29.5% | 2026-08-15 |
-| [adaptive-problem-solving](#adaptive-problem-solving) | 0.2.11 | 22.0 KB | 10.8% | 2026-08-15 |
+| [issue-workflow](#issue-workflow) | 0.3.18 | 60.2 KB | 29.5% | 2026-08-15 |
 | [orchestrated-collaboration](#orchestrated-collaboration) | 0.2.6 | 21.2 KB | 10.4% | 2026-08-15 |
+| [adaptive-problem-solving](#adaptive-problem-solving) | 0.2.12 | 19.0 KB | 9.3% | 2026-08-15 |
 | [self-improvement](#self-improvement) | 0.1.6 | 16.3 KB | 8.0% | 2026-08-15 |
 | [pr-integration](#pr-integration) | 0.3.18 | 15.6 KB | 7.7% | 2026-08-15 |
 | [issue-delivery](#issue-delivery) | 0.3.18 | 15.2 KB | 7.4% | 2026-08-15 |
@@ -33,19 +33,7 @@
 
 **什么会让它失效** GitHub 原生 sub-issue 关系、Project v2 字段写入语义或 Issue 关闭权限模型发生变化，使正文描述的建图与状态判定不再可执行。
 
-所属 Plugin `github-collaboration` `0.3.18`｜体积 60.1 KB（占预算 29.5%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/github-collaboration/skills/issue-workflow/SKILL.md`](../plugins/github-collaboration/skills/issue-workflow/SKILL.md)
-
-## adaptive-problem-solving
-
-**它替你做什么** 问题求解治理：选方法、控成本、该退出就退出，别在一条路上耗死。
-
-**什么时候用** 第一次实质路径选择、进展停滞、范围明显扩大或要交接验收时。
-
-**你怎么知道它在起作用** 方向变了会明确说出来；没变就直接继续，不额外汇报。
-
-**什么会让它失效** 方法登记面的证据等级分布与登记面 README 声明不符；或三端 description 可见预算的实测基线（2026-08-11 测得 1000 UTF-8 字节）被新的实测推翻。
-
-所属 Plugin `adaptive-problem-solving` `0.2.11`｜体积 22.0 KB（占预算 10.8%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/adaptive-problem-solving/skills/adaptive-problem-solving/SKILL.md`](../plugins/adaptive-problem-solving/skills/adaptive-problem-solving/SKILL.md)
+所属 Plugin `github-collaboration` `0.3.18`｜体积 60.2 KB（占预算 29.5%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/github-collaboration/skills/issue-workflow/SKILL.md`](../plugins/github-collaboration/skills/issue-workflow/SKILL.md)
 
 ## orchestrated-collaboration
 
@@ -58,6 +46,18 @@
 **什么会让它失效** 所选协调后端（当前 orca orchestration）的 Run／Task／Dispatch 语义或标准释放回执格式变化；或其唯一原则源 agent-control/authority/05-resource-operations.md 的资源投入原则变化，使 R1–R6 派发门失去依据。
 
 所属 Plugin `orchestrated-collaboration` `0.2.6`｜体积 21.2 KB（占预算 10.4%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/orchestrated-collaboration/skills/orchestrated-collaboration/SKILL.md`](../plugins/orchestrated-collaboration/skills/orchestrated-collaboration/SKILL.md)
+
+## adaptive-problem-solving
+
+**它替你做什么** 问题求解治理：选方法、控成本、该退出就退出，别在一条路上耗死。
+
+**什么时候用** 第一次实质路径选择、进展停滞、范围明显扩大或要交接验收时。
+
+**你怎么知道它在起作用** 方向变了会明确说出来；没变就直接继续，不额外汇报。
+
+**什么会让它失效** 方法登记面的证据等级分布与登记面 README 声明不符；或三端 description 可见预算的实测基线（2026-08-11 测得 1000 UTF-8 字节）被新的实测推翻。
+
+所属 Plugin `adaptive-problem-solving` `0.2.12`｜体积 19.0 KB（占预算 9.3%）｜上次复核 2026-08-15｜Agent 行为合同（维护／审查时读取）[`plugins/adaptive-problem-solving/skills/adaptive-problem-solving/SKILL.md`](../plugins/adaptive-problem-solving/skills/adaptive-problem-solving/SKILL.md)
 
 ## self-improvement
 
