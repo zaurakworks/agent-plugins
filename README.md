@@ -24,7 +24,7 @@
 
 正文中指向 `Eridanus117/agent-control` 的 Issue 链接**不在本次改动范围**：那些是历史证据，老仓冻结后仍可读，指向它是正确的。
 
-仓库目前包含七个可安装 Plugin：`grilling` `0.1.2`、`self-improvement` `0.1.6`、`knowledge-maintenance` `0.1.3`、`orchestrated-collaboration` `0.2.6`、`adaptive-problem-solving` `0.2.12`、`github-collaboration` `0.3.18` 与 `resource-observability` `0.2.4`。
+仓库目前包含八个可安装 Plugin：`grilling` `0.1.2`、`self-improvement` `0.1.7`、`skill-maintenance` `0.1.0`、`knowledge-maintenance` `0.1.3`、`orchestrated-collaboration` `0.2.6`、`adaptive-problem-solving` `0.2.12`、`github-collaboration` `0.3.18` 与 `resource-observability` `0.2.4`。
 
 `self-improvement` `0.1.4` 按[关联 agent-control#139（P0-1 迭代回执地基）](https://github.com/Eridanus117/agent-control/issues/139)承载一份按需读取的十字段迭代回执协议；`adaptive-problem-solving` `0.2.9` 在阶段合同与攻防裁决需要跨 Session 恢复时引用该协议，`knowledge-maintenance` `0.1.1` 只回填知识出口证据。回执寄生于当前 Issue 的同一条自足评论与自然里程碑，不建数据库、独立登记表或定时器；APS 继续是唯一任务内控制器，Issue 生命周期与知识准入仍各归现有机制，`orchestrated-collaboration` 不成为第二承载面。
 
@@ -35,6 +35,10 @@
 `grilling` 用结构化问题压力测试计划、决定或想法。Agent 可以发现它，但只有用户直接要求，或明确接受一次建议后，才能开始问询；用户可以继续普通任务、拒绝、降级或退出。它与期待的完整“升级思考”仍有差距，不代表最终方法，也不代表未来只能使用这一种方法。
 
 `self-improvement` 在用户指出 Agent 漂移、误解或重复犯错，或者讨论陷入只增加抽象却没有减少不确定性的循环时，帮助 Agent 停止旧路径、保存纠正、诊断断点，用最小可逆资产检验高层判断，并把值得复用的行为改进放到系统提示词或 Skill。它是完整元方法能力的第一个窄切片，不代表知识、多 Agent 或整个元方法领域都被做成了 Skill。
+
+`self-improvement` `0.1.7` 把承载位置已确定为 Skill 的纠正交给 `skill-maintenance`，自己只负责停止漂移、诊断根因、判断长期价值和选择持久载体，不再复制来源盘点、预算、版本、clean cutover 或审查协议。
+
+`skill-maintenance` `0.1.0` 在明确创建、审计、修正、拆分、升级、迁移或退役 Skill 时进入：先绑定当前行为合同与授权，预注册行为判据，再同步主合同、按需 reference、全部调用者、双端发现入口、版本、生成物和复杂度预算；安全门零回退，调用者 clean cutover，方案／实施同源时必须独立审查。它不维护普通业务代码，也不替 `self-improvement` 决定一次纠正应该落到哪里。
 
 `knowledge-maintenance` 在多来源调研、可重复实验或重要决定前，先复用仍成立的当前知识，只补查变化、冲突和缺口；新结论逐条通过价值门与可信门后才能进入当前知识。它不保存原始会话，不替代研发记忆，也不决定知识平台、私域结构或知识图谱。
 
@@ -95,6 +99,13 @@ claude plugin marketplace remove agent-plugins
 ```powershell
 codex plugin add self-improvement@agent-plugins --json
 claude plugin install self-improvement@agent-plugins --scope user
+```
+
+安装 `skill-maintenance` 时也使用同一个 Marketplace：
+
+```powershell
+codex plugin add skill-maintenance@agent-plugins --json
+claude plugin install skill-maintenance@agent-plugins --scope user
 ```
 
 安装 `knowledge-maintenance` 时也使用同一个 Marketplace：
