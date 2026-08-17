@@ -2615,7 +2615,7 @@ for (const [skill, entry] of Object.entries(skillLifecycle)) {
   invalidationTexts.set(entry.invalidatedWhen, skill);
 }
 
-type ComplexityBudgetDimension = 'maxSkills' | 'corpusMaxUtf8Bytes';
+type ComplexityBudgetDimension = 'maxSkills';
 type ComplexityBudgetException = {
   dimension: ComplexityBudgetDimension;
   from: number;
@@ -2624,28 +2624,30 @@ type ComplexityBudgetException = {
   scope: string;
 };
 const budget = manifest.complexityBudget as {
-  unit: string;
+  comment: string;
   maxSkills: number;
-  corpusMaxUtf8Bytes: number;
   exceptions: ComplexityBudgetException[];
   baseline: {
     observedAt: string;
     skills: number;
-    corpusUtf8Bytes: number;
-    limits: Record<ComplexityBudgetDimension, number>;
+    maxSkills: number;
+  };
+  retiredCorpusGate: {
+    reportedUtf8Bytes: number;
+    maxUtf8Bytes: number;
+    retiredBy: string;
+    reason: string;
   };
 };
 assert.ok(budget, 'tests/workflow-routing.json 缺少 complexityBudget');
-assert.equal(budget.unit, 'utf8-bytes', '复杂度预算量纲必须是 UTF-8 字节');
 assert.deepEqual(
   budget.baseline,
   {
     observedAt: '2026-08-15',
     skills: 12,
-    corpusUtf8Bytes: 208_420,
-    limits: { maxSkills: 12, corpusMaxUtf8Bytes: 209_000 },
+    maxSkills: 12,
   },
-  '复杂度预算历史基线必须保持稳定；提高上限只能追加负责人例外，不能改写基线',
+  'Skill 数量预算历史基线必须保持稳定；提高上限只能追加负责人例外，不能改写基线',
 );
 assert.deepEqual(
   budget.exceptions[0],
@@ -2658,7 +2660,28 @@ assert.deepEqual(
   },
   '12→13 是 agent-control#57 的一次性历史例外，不能扩写或挪作后续授权',
 );
-const authorizedCaps: Record<ComplexityBudgetDimension, number> = { ...budget.baseline.limits };
+assert.deepEqual(
+  budget.retiredCorpusGate,
+  {
+    reportedUtf8Bytes: 208_420,
+    maxUtf8Bytes: 209_000,
+    retiredBy: 'https://github.com/zaurakworks/agent-plugins/issues/16',
+    reason: '只读取 references 顶层 Markdown，漏计嵌套方法卡；同时把 L2、L3 和维护面混成一个运行上下文预算',
+  },
+  '已退役的 209KB 口径必须作为历史缺陷保留，不能重新冒充当前预算',
+);
+assert.equal(
+  'corpusMaxUtf8Bytes' in budget,
+  false,
+  '复杂度预算不得恢复把 L2、L3 与维护面混成一个运行上下文上限的 corpusMaxUtf8Bytes',
+);
+for (const marker of ['L1 description', 'L2 SKILL.md', 'L3 references', '维护复杂度', 'agent-plugins#16']) {
+  assert.ok(budget.comment.includes(marker), `复杂度预算说明缺少分层事实「${marker}」`);
+}
+
+const authorizedCaps: Record<ComplexityBudgetDimension, number> = {
+  maxSkills: budget.baseline.maxSkills,
+};
 const budgetAuthorizationRecords = new Set<string>();
 for (const exception of budget.exceptions) {
   assert.equal(
@@ -2688,34 +2711,54 @@ assert.ok(
   `Skill 数上限 ${budget.maxSkills} 超过已登记负责人例外可达的 ${authorizedCaps.maxSkills}`,
 );
 assert.ok(
-  budget.corpusMaxUtf8Bytes <= authorizedCaps.corpusMaxUtf8Bytes,
-  `Skill 字节上限 ${budget.corpusMaxUtf8Bytes} 超过已登记负责人例外可达的 ${authorizedCaps.corpusMaxUtf8Bytes}`,
-);
-assert.ok(
   declared.length <= budget.maxSkills,
   `Skill 数量 ${declared.length} 超过上限 ${budget.maxSkills}：新增必须同时给出被退役的对象，或由负责人批准提高上限并在 Issue 留下理由`,
 );
 
-// 语料 = 会被当作 Skill 加载进上下文的字节。同时覆盖 references/，否则把正文挪进
-// references 就能绕过预算。docs/ 与 README 写给人看，不计入。
-let corpusBytes = 0;
+function markdownBytesRecursively(root: string): number {
+  if (!existsSync(root)) return 0;
+  let total = 0;
+  for (const entry of readdirSync(root)) {
+    const path = join(root, entry);
+    if (statSync(path).isDirectory()) {
+      total += markdownBytesRecursively(path);
+    } else if (entry.endsWith('.md')) {
+      total += Buffer.byteLength(read(path), 'utf8');
+    }
+  }
+  return total;
+}
+
+let level2MainBytes = 0;
+let level3ReferenceBytes = 0;
+let shallowReferenceBytes = 0;
 for (const plugin of pluginNames) {
   const skillsRoot = join(pluginsRoot, plugin, 'skills');
   if (!existsSync(skillsRoot)) continue;
   for (const skill of directories(skillsRoot)) {
-    corpusBytes += Buffer.byteLength(read(join(skillsRoot, skill, 'SKILL.md')), 'utf8');
+    level2MainBytes += Buffer.byteLength(read(join(skillsRoot, skill, 'SKILL.md')), 'utf8');
     const referencesRoot = join(skillsRoot, skill, 'references');
     if (!existsSync(referencesRoot)) continue;
+    level3ReferenceBytes += markdownBytesRecursively(referencesRoot);
     for (const file of readdirSync(referencesRoot)) {
-      if (file.endsWith('.md')) {
-        corpusBytes += Buffer.byteLength(read(join(referencesRoot, file)), 'utf8');
+      const path = join(referencesRoot, file);
+      if (statSync(path).isFile() && file.endsWith('.md')) {
+        shallowReferenceBytes += Buffer.byteLength(read(path), 'utf8');
       }
     }
   }
 }
+const maintenanceCorpusBytes = level2MainBytes + level3ReferenceBytes;
+assert.ok(level2MainBytes > 0, 'L2 主合同实测必须覆盖 SKILL.md');
+assert.ok(level3ReferenceBytes > 0, 'L3 实测必须覆盖 references');
 assert.ok(
-  corpusBytes <= budget.corpusMaxUtf8Bytes,
-  `Skill 语料 ${corpusBytes} UTF-8 字节，超过上限 ${budget.corpusMaxUtf8Bytes}：正确动作是给出被压缩或退役的对象，不是把数字改大`,
+  level3ReferenceBytes > shallowReferenceBytes,
+  'L3 必须递归计量嵌套 references；只读顶层会重现已退役 209KB 口径的漏计',
+);
+assert.equal(
+  maintenanceCorpusBytes,
+  level2MainBytes + level3ReferenceBytes,
+  '维护面必须等于 L2 主合同与递归 L3 引用之和',
 );
 
 // ---------- 8.6 选型面是生成产物，不能与来源漂移 ----------
@@ -2741,17 +2784,24 @@ for (const [skill, entry] of Object.entries(
 }
 const overviewPath = join(repoRoot, 'docs', 'skills-overview.md');
 assert.ok(existsSync(overviewPath), 'docs/skills-overview.md 必须存在');
+const overviewText = read(overviewPath);
+const renderedOverview = renderSkillsOverview();
 assert.equal(
-  read(overviewPath),
-  renderSkillsOverview(),
+  overviewText,
+  renderedOverview,
   'docs/skills-overview.md 与来源不一致：它是生成产物，请跑 node scripts/skills-overview.ts --write，不要手改',
 );
-assert.ok(
-  read(overviewPath).includes('这是给人看的入口') &&
-    read(overviewPath).includes('`SKILL.md` 是给 Agent 执行的行为合同') &&
-    read(overviewPath).includes('不是按顺序阅读的教程'),
-  '负责人选型面必须区分人类入口与 Agent 行为合同',
-);
+for (const marker of [
+  '这是给人看的入口',
+  '`SKILL.md` 是给 Agent 执行的行为合同',
+  '不是按顺序阅读的教程',
+  `L2 主合同 ${level2MainBytes.toLocaleString('en-US')} 字节`,
+  `L3 按需 references ${level3ReferenceBytes.toLocaleString('en-US')} 字节`,
+  `递归维护面合计 ${maintenanceCorpusBytes.toLocaleString('en-US')} 字节`,
+  '三者不是同一个运行上下文预算',
+]) {
+  assert.ok(overviewText.includes(marker), `负责人选型面缺少分层成本事实「${marker}」`);
+}
 
 // ---------- 9. README 的版本总览不能落后于 manifest ----------
 
