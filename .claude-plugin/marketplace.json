@@ -28,19 +28,13 @@
     },
     {
       "name": "orchestrated-collaboration",
-      "version": "0.2.6",
+      "version": "0.2.7",
       "source": "./plugins/orchestrated-collaboration"
     },
     {
       "name": "adaptive-problem-solving",
       "version": "0.2.12",
       "source": "./plugins/adaptive-problem-solving"
-    },
-    {
-      "name": "github-collaboration",
-      "version": "0.3.18",
-      "description": "Drive a GitHub issue subtree from any Session, including bounded continuation, safe natural owner decisions, contract compaction, delivery, integration, and reclamation.",
-      "source": "./plugins/github-collaboration"
     },
     {
       "name": "resource-observability",

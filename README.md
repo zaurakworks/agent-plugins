@@ -30,7 +30,11 @@
 
 以下发布记录保留迁移前编号以便仓库维护者溯源；其中私有链接对公共协作者不可用，只是可选历史来源。当前行为、贡献要求和验收必须在本仓公开内容中自足表达。
 
-仓库目前包含八个可安装 Plugin：`grilling` `0.1.2`、`self-improvement` `0.1.7`、`skill-maintenance` `0.1.0`、`knowledge-maintenance` `0.1.3`、`orchestrated-collaboration` `0.2.6`、`adaptive-problem-solving` `0.2.12`、`github-collaboration` `0.3.18` 与 `resource-observability` `0.2.4`。
+仓库目前包含七个可安装 Plugin：`grilling` `0.1.2`、`self-improvement` `0.1.7`、`skill-maintenance` `0.1.0`、`knowledge-maintenance` `0.1.3`、`orchestrated-collaboration` `0.2.7`、`adaptive-problem-solving` `0.2.12` 与 `resource-observability` `0.2.4`。
+
+`github-collaboration` 已退役，不再提供安装入口。六项 Skill 的真实试验未证明相对“明确 Issue → 直接实现与验证 → PR／证据”的净收益，且完整维护面达到 127,105 UTF-8 字节；逐项裁决与 clean cutover 边界见 [agent-plugins#18](https://github.com/zaurakworks/agent-plugins/issues/18)。历史发布记录只用于溯源，不表示当前可安装或受支持。
+
+`orchestrated-collaboration` `0.2.7` 删除两个对已退役 Issue 驱动者的调用：任务子树由当前合同和写入所有权确定驱动者，`worker_done` 只触发远端来源核验并把事实交回当前合同持有者；它不接管 Issue 生命周期。
 
 `self-improvement` `0.1.4` 按[关联 agent-control#139（P0-1 迭代回执地基）](https://github.com/Eridanus117/agent-control/issues/139)承载一份按需读取的十字段迭代回执协议；`adaptive-problem-solving` `0.2.9` 在阶段合同与攻防裁决需要跨 Session 恢复时引用该协议，`knowledge-maintenance` `0.1.1` 只回填知识出口证据。回执寄生于当前 Issue 的同一条自足评论与自然里程碑，不建数据库、独立登记表或定时器；APS 继续是唯一任务内控制器，Issue 生命周期与知识准入仍各归现有机制，`orchestrated-collaboration` 不成为第二承载面。
 
@@ -53,12 +57,6 @@
 `adaptive-problem-solving` 是问题求解治理的薄控制循环：先恢复原始问题和当前阶段，识别最值得发力的瓶颈，比较普通处理与方法介入的价值，再选择、组合、升级、降级或退出方法，同时检查模型、推理强度、工具、上下文和协作配置。`0.1.1` 增加阶段结束与最终验收的父目标、能力回退、证据等级和负责人可见 ROI 检查；`0.1.2` 进一步要求：如果声称某项 Agent 能力能在以后或跨 Session 重复运行，必须存在持久触发、可执行行为载体、真实运行入口和可发现性证据，不能只凭页面、文件或脚本建成就宣布能力完成。关键节点检查只是入口；它不把六类方法都复制成 Skill，也不取代知识、任务状态、研发记忆或 `self-improvement`。`0.1.3` 增加“最小实验／产品最小闭环”判据表与 ROI 默认优化目标（总周期、有用吞吐和负责人注意力，不是最小改动量）。`0.1.4` 把两条路线从控制文本补成可执行资产：路线 4（攻防／反证）获得实战两次复用后固化的多视角攻防形状——轻量前置为单 Session 已失败假定预演，重型形状按角色分区、每人一条自足评论、必答结构、事实推断分开、上限时间与交叉裁决的构件表执行，以轮为推进单位并带明确启动与停止判据；路线 6（最小实验）获得预注册实验卡与收口卡字段对，成功判据开始前写死、开始后只可作废重登，解释结果前先排除测量与触发系统故障。`0.1.5` 为受限调研补上研究—选项—计划的证据分区：影响决定的主张区分本次直接验证、一手来源核验、二手转述与未核验推断，选项比较带出架构适配、假设和验证含义，计划显式保留验证面、未运行项、失败门、开放问题与完成定义；它不建立固定文件链，也不把来源核验等级混同为产品证据等级。`0.2.0` 新增按需读取的方法登记面：P1–P5 类型索引把主瓶颈映射到少量候选卡，30 张首批卡完整登记进入／退出、成本、硬门、组合、回退和两套证据等级，其中 29 张为 M0、1 张为 M1；M0 不进入默认触发，`grilling` 的明示同意门不因索引命中而改变。控制器仍只保留归型与选择规则，具体执行资产、任务样本、私域原文和权威各留原载体。同版把未经总体 ROI 比较的“渐进默认”列为与“最小 diff 默认”同类的偏差：渐进是选项，不是天然正确路线。`0.2.1` 复核两个真实任务样本，把 `premortem` 与 `key-assumptions-check` 从 M0 升为 M1，登记面分布同步为 M0 27 张、M1 3 张；两张卡都保留“只可在相同边界下建议”的选择资格，并把样本暴露的授权保护、证据锚点、状态分级与下一复核面落入卡片。`0.2.2` 复核红队实战，把 `red-team-analysis` 在私域迁移链路只读安全审查边界升为 M1，登记面分布同步为 M0 26 张、M1 4 张；同版用 21 个真实决策时刻校准 P2／P5、P3／P4 与 P4／P7 的阶段边界，正式给 P6 增加可直接首跳的补充出口，并补上攻防发现后的 P1 回建模桥、ROI 代理指标验收和后续样本介入前水位。`0.2.3` 把 description 压到三端共同的 1000 UTF-8 字节预算内，并修正登记面基线水位。`0.2.4` 以两组真实任务证据把 `comparative-experiment` 与 `aps-roi-options` 有界升为 M1，同时把后者不必要升级负责人决定的失败样本写回方法卡；证据分布变为 M0 24 张、M1 6 张，其他候选不因任务形状相似而追认使用。`0.2.5` 以负责人直接复核的三方机制决定面与运营指标基线，把 `devils-advocacy`、`goal-question-metric` 分别在原窄边界升为 M1；证据分布变为 M0 22 张、M1 8 张，未见完整执行链的其他候选保持 M0。`0.2.7` 复核两批显式方法卡实战，把 `quality-of-information-check`、`outside-in-thinking`、`paired-observation` 与 `indicators-signposts` 各自在资源投入、知识产品外部约束、精确版本三端指纹及 Issue／Project 投影重评的窄边界升为 M1，登记面分布变为 M0 18 张、M1 12 张；`what-if-analysis` 仍缺第二项范围匹配任务，`high-impact-low-probability` 仍缺事前自然运行，两者保持 M0。该版以四张卡的旧 M0 证据占位与登记面旧分布水位支付新增依据，不改方法执行定义，也不外推为 M2、产品采用或长期依赖。`0.2.8` 按[关联 agent-control#65（周期性自我反思能力设计）](https://github.com/Eridanus117/agent-control/issues/65)的 65-D1=A，把三波有效样本常规化到 APS 既有关键节点控制段：真实工作波次为常规周期，无波次长任务在重要阶段结束取样，事件信号即时旁路，连续两波成本高于收益即退回按需；不建日历调度或自动化。选择 APS 是因为它已承载当前任务的关键节点方向控制；`self-improvement` 继续只承载跨任务行为改进与按需迭代回执。置换／压缩对象是第八节原四节点、五问和固定复盘说明；主 Skill 按 LF 规范化由 22850 降至 22848 UTF-8 字节，description 由 997 降至 991 UTF-8 字节。
 
 `adaptive-problem-solving` `0.2.12` 将主 `SKILL.md` 收敛为进入／退出、问题恢复、类型路由、共用安全门指针与结果返回；受限调研、攻防、最小实验、G1–G3 和长程验收分别移入命中条件明确的 `references/`。主控制合同从 22,537 UTF-8 字节降为 8,812 字节，五份分支协议与主合同合计仍低于拆分前基线；未命中分支不加载，授权、同意、写入所有权、M0／M1 选择资格、攻防四席下限和产品证据等级不变。
-
-`github-collaboration` 是 GitHub 持久协作主干的轻量工作流 Plugin。`0.3.0` 起，它的入口是 `issue-workflow`：任何一个 Session 只用远端事实就能判断自己在一棵 Issue 子树里的角色——叶子 Issue 端到端交付并按风险进入审查与整合，父 Issue 在当前授权内维护子图、选择下一切片并决定自己执行还是派发，交付结束后回到父级逐条找证据；没有可执行子项而父级成功条件仍未满足时，补规划、报告阻塞或提出一次负责人决定，不用空队列宣称完成。手上没有具体 Issue 时它不挑活、不遍历仓库队列，而是退回经营总账与未满足诉求，经 `adaptive-problem-solving` 形成有界 Issue 后再进入。它是这条链上的唯一驱动者：段 Skill 只把结果返回给它，不反向驱动，也不自建第二套状态机。`0.3.1` 在它的恢复路径前面补上远端访问能力的选择规则：先确定本次需要哪些 GitHub 语义（正文与评论、原生父／子关系、PR 当前 head、写权限），再在实际可用且已认证的候选里选一个能表达它们的。某个命令行客户端不在 `PATH`、某个集成没连上，只证明那一个候选不可用，不构成阻塞；只有所有候选都无法表达某项语义时，才精确报告缺口并只冻结受影响的读写。规则按语义而不是按客户端名表达，因此不保存会过期的命令清单，也不因为某个候选这次好用就把它变成长期依赖；安装工具、改 `PATH`、读写凭据和降级到未认证抓取始终不在其中。`0.3.2` 增加在线任务自然发现父级缺口后的有边界续接：只对明确开放且授权有效的父级恢复，按退出／记录证据／候选／可执行子项分类，全部准入和限流通过后才建立至多一个原生子 Issue，并复用现有建图、派发和回收段；发现者回写父级后退出，不保留永久协调职责。合同压缩同时改为优先比较原始序列化标量或稳定快照；必须解析时间时使用 UTC 或带明确偏移量的绝对时刻语义，`DateTimeOffset` 只是部分宿主中的示例，且规范化不得降低源精度，避免本地文化时间表示产生假陈旧或因精度丢失产生假一致。`0.3.3` 增加负责人决定协议：区分普通授权门和真实产品取舍，短请求必须携带 Agent 推荐、证据／置信度、最强可信反方、翻转条件、普通路径成本与稳定编号；只有显式编号或唯一紧邻决定才能绑定 `B`／“同意”等自然短回复，Markdown 引用块不产生授权，带条件批准只能缩小范围。无歧义后写回分列已授权、未授权、下一责任人、下一动作与纠正入口的决定回执，后续 Session 直接恢复该回执而不重复询问同一门；只有当前、明确且尚未消费的负责人动作才投影为“等待负责人”，消费决定时同闭环清除旧等待、切换到下一真实执行状态，并按授权关闭已经满足成功条件的来源 Issue。补充行为仍保持 `github-collaboration 0.3.3`，不新增 Project 字段。`0.3.4` 给这套决定协议补上审阅面语言规范：写给负责人看的决定请求、决定回执和收口总结按信、达、雅三条同时成立的标准写——保留正式概念名与完整上下文而不用生活化比喻替代术语，决定编号与选项代号首次出现即在同一句内联说明、正文自足，行文书面且在开头或结尾给出一段可以独立支撑决定的总览；术语堆砌与过度直白同为偏差，判据是负责人能否只凭这段文字作出这次决定。规范只约束表达，不改变决定权归属、请求分类和解析规则，也不成为推迟决定请求的新门。同一版本把 `issue-workflow` 的 description 从 1999 字符压缩到当时的 1536 字符口径内并保留全部触发语义——运行端按单个字段读取，超出部分不报错而是被静默截断，尾部的“不要用它做什么”会直接消失；该版符合性检查沿用了字符计数，`0.3.9` 已以三端共同的 1000 UTF-8 字节口径替换。`0.3.5` 给决定回执并入三行决策日志推荐字段：预期结果（执行后预计观察到什么、何时可检验）、粗粒度置信（高／中／低，不伪造精确概率）、翻转条件（什么事实会推翻本决定）；翻转条件同时成为“命中翻转条件才重开决定”的判据来源，服务“预期 vs 实际”的回看闭环。三字段是推荐而不是新的门，缺失不阻塞消费决定。`0.3.6` 交付 Skill 维护批次三：关闭门消费负责人批准的三条件预授权谓词，满足远端证据、无未收口关系且对象属于交付／实验／摩擦类时带规则来源回执收口，目标与诉求层、父目标、产品取舍和授权边界类仍走决定门；决定编号统一为 Issue 号前缀，显式前缀优先，两组同格式编号并存时不再按唯一紧邻消费；协调者转呈含决定请求的交付前核对备选（含维持现状）、逐项比较、推荐与置信、最强可信反方和翻转条件，缺项退回重构。三项分别替代“一律逐次询问关闭”“裸局部编号依赖评论邻接”“已有请求文字即可转呈”的旧默认；授权与动机来源见 [`agent-control#44`](https://github.com/Eridanus117/agent-control/issues/44#issuecomment-5255408590)、[错绑定波次回执](https://github.com/Eridanus117/agent-control/issues/44#issuecomment-5255737976) 与 [决定请求撤回回执](https://github.com/Eridanus117/agent-control/issues/9#issuecomment-5255799405)。`0.3.7` 把本仓缺少的通用工程检查并入现有交付链：按改动相关性覆盖正确性与边界输入、异步与错误路径、API 与兼容性、测试真实性、IO／数据／迁移、安全与资源等维度，并统一记录实际运行、未运行、剩余验证缺口和开放问题；PR 快照精确区分 Draft、review decision／request、required／optional checks、冲突与 merge state，以及顶层／inline 的人和自动化反馈，查询失败不冒充 CI 状态。分支维护要求干净工作树、动态 remote／upstream、fetch 后 rebase、逐项处理冲突、相称验证和 lease 保护更新，合并后只 fast-forward 同步默认分支并复核 commit。`issue-workflow` 同时按 [9-D2 批准回执](https://github.com/Eridanus117/agent-control/issues/9#issuecomment-5255912747) 增加关闭前蒸馏检查：评论中有可复用结论时先把候选及来源交给 `knowledge-maintenance` 留下可恢复去向，再关闭；该检查只防遗漏，不替知识流程执行价值门或可信门。三组吸收需求均来自 [#44 吸收清单](https://github.com/Eridanus117/agent-control/issues/44#issuecomment-5256023899)，本仓仅按能力合同独立实现，不引入卸载市场插件的文本、固定目录或状态标记。`0.3.8` 把负责人批准的 Issue 治理收敛为全插件唯一共享创建骨架：七类中文标题前缀闭集、匹配的类型 label 与唯一领域 label、自足中文正文、安全的 `关联 #N` 引用、原生 sub-issue、经营总账 Project 与实际执行状态写入在同一创建批次完成并远端复核；Project 条目值只用 `updateProjectV2ItemFieldValue`，禁止以具有全量替换语义的 `updateProjectV2Field` 修改字段定义。该骨架替代“新 Issue 不默认加入 label／Project”的旧默认，只约束创建动作，不改变既有准入、限流和唯一生命周期状态机，也不新增轮询或自动化。
-
-`github-collaboration` `0.3.9` 落地 [`agent-control#66 多视角攻防审计`](https://github.com/Eridanus117/agent-control/issues/66) Skill 批裁决：决定消费在文本解析前绑定仓库所有者或合同明示负责人账号，Bot、GitHub App 与其他用户不产生授权；叶子以“可独立核验交付物”而非 PR 判定，代码交付走 Draft PR，调研／审计／只读证据走自足评论并直接回收，Draft → ready 只由 `pr-integration` 在五项门齐全后执行；七类 Issue 创建类型通过 `objective-to-issues` 唯一映射到四种经营节点，`operating-ledger-maintenance` 只引用该表；合同压缩新增正文排他所有权和包含完整旧正文的远端恢复快照；`issue-delivery` 只引用 `authority/04-collaboration.md` 的共享单点规范源，并在入口级发布不变量落地前引用现行 `关联 #N` 安全规则。符合性测试把旧的 1536 字符口径替换为三端共同的 **1000 UTF-8 字节**门，并加入身份、评论交付、类型映射、Draft → ready 与双写入者竞态夹具；按合同未修改 `adaptive-problem-solving` 与 `self-improvement`，前者的既有超限由 70-D 显式留给后继裁决。`0.3.10` 把负责人可见面中的 Issue、PR 与决定编号统一为首次出现附中文短题，并让安全关联规则与符合性场景使用同一语义。`0.3.11` 消费 [`agent-control#66 L2-F3 收口补证`](https://github.com/Eridanus117/agent-control/issues/66#issuecomment-5257964613)：需要同时写来源 Issue 与经营 Project 的决定收口批由 `operating-ledger-maintenance` 充当唯一远端执行者，顺序固定为来源在先、Project 投影随后、双对象重读、更新单一稳定回执；`issue-workflow` 只提供生命周期判定与目标事实，部分失败按稳定定位符只补缺失步骤。`0.3.12` 为已经进入 `main` 的[关联 #67（决定面三律补丁）](https://github.com/Eridanus117/agent-plugins/pull/67)补齐发布身份：短决定请求必须自足、活动请求置顶于来源 Issue 正文、逐选项显式列出负责人的时间与参与成本；同时同步 Claude／Codex Plugin manifest、两端 Marketplace 与版本化符合性声明，使内容变化、可安装版本和回退取证重新一一对应。
-
-其余 Skill 各自承担一段：`issue-contract-compaction` 把变长的讨论收敛回可交接正文，写前要求正文排他所有权与远端恢复快照；`issue-delivery` 按合同交付 Draft PR 或自足评论／证据；`pr-integration` 绑定当前 head 验收并独占 Draft → ready 动作，再把合并后的远端事实交回唯一驱动者；`objective-to-issues` 建立或增量维护父／子 Issue 图并拥有七类到四节点的唯一映射；`operating-ledger-maintenance` 引用该映射，分开维护执行状态、诉求状态和证据等级。全链共用一张三级风险表：低风险保持轻量，已有预授权不重复索要批准，只有方向、共享状态、难回退或高价值父目标才要求未参与实现者的独立复核。多 Agent 的活跃派发仍交给 `orchestrated-collaboration` 与当前真实后端，Plugin 不复制 Orca 命令，也不把 GitHub 或 Orca 固化为永久依赖。
 
 `resource-observability` 在用户询问账户容量、重置时间、Codex 重置券或单 Session Token，或者高成本／多 Agent 工作需要资源决定时，按需组合两种现有来源：账户层读取 `orca account list --json`，会话层通过固定 `ccusage` `20.0.19` 生成 Token 回执。Skill 只保留负责人需要的窗口、时间、权益、来源和失败，不输出账户标识、凭据、原始正文、路径或 stderr。`0.2.1` 将会话薄门面和直接耦合的验证资产迁移到 TypeScript，由 Node 直接运行 `.ts` 源码，保持原协议、退出码、超时、输出上限、Windows npm shim 和脱敏边界。该门面只服务会话协议，不代表完整产品。它不建设监控、轮询、自动停止、计费推断或调度，也不自动消费重置券；Orca 只是当前可替换来源，不因此成为长期依赖。
 
@@ -135,12 +133,6 @@ codex plugin add adaptive-problem-solving@agent-plugins --json
 claude plugin install adaptive-problem-solving@agent-plugins --scope user
 ```
 
-安装 `github-collaboration`：
-
-```powershell
-codex plugin add github-collaboration@agent-plugins --json
-claude plugin install github-collaboration@agent-plugins --scope user
-```
 
 安装 `resource-observability`：
 
@@ -151,7 +143,6 @@ claude plugin install resource-observability@agent-plugins --scope user
 
 显式入口是 Codex 的 `$resource-observability` 与 Claude 的 `/resource-observability:resource-observability`。账户层由 Skill 调用 `orca account list --json` 并只整理 Claude／Codex 窗口与 Codex 重置券；会话层继续使用内置 TypeScript CLI 的 `session --provider codex|claude --id <id> --json|--summary`，JSON 标准输出恰好一个回执且自带 `summary_zh`。Node 直接运行该 `.ts` 入口，CLI 默认调用 `ccusage` 并固定验证 `20.0.19`，测试或非标准安装可用显式 `--ccusage-command`。当前仓库交付不自动安装、升级或移除 Orca、Node 或 `ccusage`；账户来源不可用时明确失败，不读取凭据或改走内部 HTTP。
 
-`github-collaboration` 的显式入口在 Codex 是 `$issue-workflow`、`$issue-contract-compaction`、`$issue-delivery`、`$pr-integration`、`$objective-to-issues` 与 `$operating-ledger-maintenance`；在 Claude 是同名的 `/github-collaboration:<skill>`，其中主入口的完整标识为 `/github-collaboration:issue-workflow`。本仓只提供可安装骨架；修改仓库不会自动安装或升级任何用户级 Plugin。
 
 ## 检查
 
@@ -160,7 +151,7 @@ node tests/workflow-routing.test.ts
 node plugins/orchestrated-collaboration/tests/verify-three-party-review.test.ts
 ```
 
-它检查版本化来源本身：每个 Skill 的必需字段、双语触发说明与 1000 UTF-8 字节预算（含稳定决定编号约束的显式例外），跨 Skill 路由和唯一驱动者，可信授权主体、非 PR 交付、Draft → ready、七类到四节点映射、正文压缩竞态等夹具，验收场景正文落点，以及两端 Plugin 清单、发现目录和 README 版本是否一致。通过只说明来源资产自洽，不代表任一运行端已经安装成功，也不代表方法在真实任务中产生收益。
+它检查版本化来源本身：当前 Skill 的必需字段、双语触发说明与 1000 UTF-8 字节预算、剩余跨 Skill 路由与验收场景、生命周期与分层成本、两端 Plugin 清单、发现目录、退役负例和 README 当前版本是否一致。通过只说明来源资产自洽，不代表任一运行端已经安装成功，也不代表方法在真实任务中产生收益。
 
 ## 这个仓负责什么
 
@@ -179,7 +170,7 @@ node plugins/orchestrated-collaboration/tests/verify-three-party-review.test.ts
 
 - 当前目标、授权和边界：读取本仓公开、自足且经负责人明确激活的 Issue／PR；没有明确合同则只做当前请求的最小范围；
 - 当前可安装内容：读取本 README 和对应 Plugin manifest；
-- `issue-workflow` 的三种模式、验收场景走读和当前证据等级：[`docs/issue-workflow-walkthrough.md`](docs/issue-workflow-walkthrough.md)；
+- 已退役内容与理由：读取 [agent-plugins#18](https://github.com/zaurakworks/agent-plugins/issues/18)；不得从历史走读恢复 `github-collaboration`；
 - **每个 Skill 替你做什么、什么时候用，以及 L1／L2／L3 与递归维护面实测：[`docs/skills-overview.md`](docs/skills-overview.md)**（生成产物，符合性测试钉住它不会漂）；
 - 「装了才算数」的部署方式、Skill 的失效条件、最少复核、退役路径与复杂度管理：[`docs/lifecycle.md`](docs/lifecycle.md)。其中「必须声明失效条件与最少复核步骤」「Skill 数量门」「分层体积必须递归、可复现」由本仓 CI 强制；
 - [方法资产模型](docs/asset-model.md)、[符合性检查](docs/conformance.md)、旧 Issue 和 `codex-work`：只作为历史或待核验材料，不默认指导新工作。
