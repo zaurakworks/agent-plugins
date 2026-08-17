@@ -180,8 +180,8 @@ node plugins/orchestrated-collaboration/tests/verify-three-party-review.test.ts
 - 当前目标、授权和边界：读取本仓公开、自足且经负责人明确激活的 Issue／PR；没有明确合同则只做当前请求的最小范围；
 - 当前可安装内容：读取本 README 和对应 Plugin manifest；
 - `issue-workflow` 的三种模式、验收场景走读和当前证据等级：[`docs/issue-workflow-walkthrough.md`](docs/issue-workflow-walkthrough.md)；
-- **每个 Skill 替你做什么、什么时候用、花掉多少复杂度预算：[`docs/skills-overview.md`](docs/skills-overview.md)**（生成产物，符合性测试钉住它不会漂）；
-- 「装了才算数」的部署方式、Skill 的失效条件、最少复核、退役路径与复杂度预算：[`docs/lifecycle.md`](docs/lifecycle.md)。其中「必须声明失效条件与最少复核步骤」「数量与语料总量不得净增」由本仓 CI 强制；
+- **每个 Skill 替你做什么、什么时候用，以及 L1／L2／L3 与递归维护面实测：[`docs/skills-overview.md`](docs/skills-overview.md)**（生成产物，符合性测试钉住它不会漂）；
+- 「装了才算数」的部署方式、Skill 的失效条件、最少复核、退役路径与复杂度管理：[`docs/lifecycle.md`](docs/lifecycle.md)。其中「必须声明失效条件与最少复核步骤」「Skill 数量门」「分层体积必须递归、可复现」由本仓 CI 强制；
 - [方法资产模型](docs/asset-model.md)、[符合性检查](docs/conformance.md)、旧 Issue 和 `codex-work`：只作为历史或待核验材料，不默认指导新工作。
 
 不要从旧交付顺序、私有历史或开放状态自行恢复工作。跨仓项目调用本仓 Plugin 时，以调用方公开合同和本仓当前可用接口的交集为边界。

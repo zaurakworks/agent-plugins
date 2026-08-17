@@ -80,22 +80,26 @@ git -C <repo-root> worktree add <worktree-root>/<分支> -b <分支>
 
 ## 三、复杂度预算
 
-问题不是「Skill 太多」，是**加得动、减不动**。今天已有的体积断言全是逐个 Skill 的历史棘轮（`<= 22_848`、`<= 21_823`……），彼此不一致、还有重复，而且**没有任何总量**。
+问题不是「Skill 太多」，而是过去把两种不同成本压成了一个数字：
 
-因此设两个总量上限，写进 `tests/workflow-routing.json` 的 `complexityBudget`，由 CI 强制：
+- **运行上下文成本**取决于加载层。L1 description 常驻目录；L2 `SKILL.md` 只在选中后加载；L3 `references/` 只在正文明确路由后按需加载。
+- **维护复杂度**覆盖全部可执行语料、路由和验证面；Markdown 体积按 `SKILL.md` 加递归 `references/**/*.md` 计量。
 
-| 项 | 上限 | 依据 |
+两者分开管理：
+
+| 项 | 处理 | 依据 |
 | --- | --- | --- |
-| Skill 数量 | 13 | 原基线 12 且不留余量；负责人在 [`agent-control#57`](https://github.com/zaurakworks/agent-control/issues/57) 明确批准新增一个独立 `skill-maintenance`，只把本次上限提高到 13 |
-| 语料总字节 | 209,000 | 基线总量 208,420，向上取整 |
+| Skill 数量 | 上限 13 | 原基线 12；负责人在 [`agent-control#57`](https://github.com/zaurakworks/agent-control/issues/57) 窄授权新增一个 `skill-maintenance` |
+| 单项 L1 description | 上限 1000 UTF-8 字节 | 2026-08-11 普通 Codex、Orca Codex、Claude Code 三端可见性实测 |
+| L2 主合同 | 实测报告，不设总字节上限 | 只在选择 Skill 后加载；逐项行为审阅决定缩减或退役 |
+| L3 按需引用 | 递归实测报告，不设总字节上限 | 只有真实路由才进入运行上下文；嵌套引用仍属于维护面 |
+| 递归维护面 | L2 + L3 实测报告 | 防止把正文搬进 references 冒充维护减法，但不冒充一次运行上下文 |
 
-**语料总量同时覆盖 `SKILL.md` 与 `references/`。** 只卡正文会直接导致把文字挪进 references——预算必须堵住这条洗白路径。
+[`docs/skills-overview.md`](./skills-overview.md) 每次从源码生成上述分层事实。来源检查通过只证明计量和声明一致，不证明任一运行端已安装、触发或产生净收益。
 
-预算的对象是**会被当作 Skill 加载进 Agent 上下文的字节**。`docs/`（含本文）与 `README.md` 是写给人看的，不计入；它们的约束是别的——没人读的文档不会因为不占预算就变得有用。
+原 `209000` 字节硬门已由 [`agent-plugins#16`](https://github.com/zaurakworks/agent-plugins/issues/16) 退役：它只扫描 `references/` 顶层 Markdown，漏掉嵌套方法卡；同时把 L2、L3 和维护面错误当成同一批上下文字节。把漏项补进旧上限只会得到更大的错误数字，不解决口径问题。
 
-上限默认取实际值，不留余量：目的就是让「加」必须伴随「换」。撞上上限时的正确动作是给出被压缩或退役的对象，而**不是**把数字改大。提高上限是负责人决定，且必须在 Issue 里留下理由；[`agent-control#57`](https://github.com/zaurakworks/agent-control/issues/57) 是一次只增加一个独立维护 Skill 的窄例外，不授权未来继续提高数量或字节上限。
-
-逐 Skill 的既有棘轮保持原样：它们锁定的是具体版本的谈判结果，与总量预算目的不同，合并会丢掉信息。
+数量门继续要求「加」伴随「换」。移动文字只有在正文保留明确按需路由时才可能降低运行成本，且不降低维护复杂度；真正优化优先删除行为、状态机、依赖和重复调用者。逐 Skill 的既有棘轮暂保留为历史谈判记录，后续在对应 Skill 审阅中逐项裁决。
 
 ## 四、写作判据
 
@@ -117,7 +121,7 @@ git -C <repo-root> worktree add <worktree-root>/<分支> -b <分支>
 | 选型面不得与来源漂移 | 2 拦截 | CI 重新生成并逐字节比对 |
 | 必须声明失效条件与最少复核步骤 | 2 拦截 | CI 断言存在且非空 |
 | `suspect` 标记的结构完整性 | 2 拦截 | CI 断言同时有命中条件与日期 |
-| 数量与语料总量不得净增 | 2 拦截 | CI 断言 `complexityBudget` |
+| Skill 数量不得越过已授权上限；L1／L2／L3 与维护面必须可复现 | 2 拦截 | CI 断言 `complexityBudget` 并递归实测 |
 | 退役必须确认三处都不存在 | 3 生成 | `plugin_release retire` |
 | 复核到期提醒 | 3 生成 | `plugin_release check` 本地报告 |
 | 开发不在生产检出里做 | **4 文本** | 无（只影响漂移检测能否判定，不影响会话行为） |

@@ -276,10 +276,8 @@
     }
   },
   "complexityBudget": {
-    "comment": "原基线取 2026-08-15 的实际值且不留余量，默认要求「加」伴随「换」。负责人在 agent-control#57 明确选择新增一个独立 skill-maintenance，因此仅把 maxSkills 从 12 提高到 13；该例外不授权未来继续提高数量或字节上限。corpusMaxUtf8Bytes 仍覆盖 SKILL.md 与 references/，否则把正文挪进 references 就能绕过。docs/ 与 README 写给人看，不计入。",
-    "unit": "utf8-bytes",
+    "comment": "只保留 Skill 数量硬门，要求新增同时给出置换或负责人例外。运行上下文成本分为 L1 description、触发后加载的 L2 SKILL.md 与按需加载的 L3 references；维护复杂度递归计量 L2+L3。两种成本由生成页报告，不能再用一个字节上限冒充。原 209000 门因非递归漏计嵌套 references，且错误假定所有层同时进入上下文，已由 agent-plugins#16 退役。",
     "maxSkills": 13,
-    "corpusMaxUtf8Bytes": 209000,
     "exceptions": [
       {
         "dimension": "maxSkills",
@@ -292,11 +290,13 @@
     "baseline": {
       "observedAt": "2026-08-15",
       "skills": 12,
-      "corpusUtf8Bytes": 208420,
-      "limits": {
-        "maxSkills": 12,
-        "corpusMaxUtf8Bytes": 209000
-      }
+      "maxSkills": 12
+    },
+    "retiredCorpusGate": {
+      "reportedUtf8Bytes": 208420,
+      "maxUtf8Bytes": 209000,
+      "retiredBy": "https://github.com/zaurakworks/agent-plugins/issues/16",
+      "reason": "只读取 references 顶层 Markdown，漏计嵌套方法卡；同时把 L2、L3 和维护面混成一个运行上下文预算"
     }
   },
   "pluginVersions": {
