@@ -4,7 +4,7 @@
 
 知识有失效条件、有最少复核步骤、复核做不到就退出当前知识。Skill 一直没有这一层：一旦发布就永远有效，没有任何机制问它「你还对吗」。
 
-本文补这一层，只补这一层。资产的对象责任见 [`asset-model.md`](./asset-model.md)，证据等级与行为场景见 [`conformance.md`](./conformance.md)，版本化来源自洽由本仓 CI 强制，本机安装态由 `agent-control` 的 `tools/plugin_release` 检测。
+本文补这一层，只补这一层。资产的对象责任见 [`asset-model.md`](./asset-model.md)，证据等级与行为场景见 [`conformance.md`](./conformance.md)，版本化来源自洽由本仓 CI 强制；本机安装态由使用者在目标 Codex／Claude 客户端查询并以真实新会话核验。
 
 一条贯穿规则：**能落成检查就不写成文字。** 下面每条规则都标注它实际落在哪一层——只有第 4 层（文本）才依赖执行者自觉，而第 4 层的每一条都应被视为暂时状态。
 
@@ -24,26 +24,22 @@
 
 | 位置 | 状态 | 谁动它 |
 | --- | --- | --- |
-| `workspace/agent-plugins` | 保持 `origin/main` 的干净检出 | 只有 `plugin_release sync` 快进它 |
-| `workspace/agent-plugins-work/<分支>` | git worktree，随便改 | 所有开发在这里 |
+| `<repo-root>` | 保持 `origin/main` 的干净检出 | 发布或安装时更新 |
+| `<worktree-root>/<分支>` | Git worktree | 所有开发在这里 |
 
 生产检出保持干净**不再是安全要求**——在它上面编辑不会立刻影响任何会话。它是**可判定性要求**：漂移检测要回答「装的是不是 `origin/main` 应有的内容」，而工作树停在特性分支时它不代表那个内容，检测就失明了。
 
 新建开发 worktree：
 
 ```
-git -C C:/Users/Morni/workspace/agent-plugins worktree add ../agent-plugins-work/<分支> -b <分支>
+git -C <repo-root> worktree add <worktree-root>/<分支> -b <分支>
 ```
 
-合并后**让新正文真正生效**：
+合并后**让新正文真正生效**，按本仓 README 从 `<repo-root>` 添加 Marketplace，并在目标客户端显式安装或升级对应 Plugin。随后回读客户端的已安装列表，再用一个真实新会话核验实际 Skill 描述或行为。
 
-```
-python C:/Users/Morni/workspace/agent-control/tools/plugin_release/plugin_release.py sync --apply
-```
+本仓不提供跨机器部署器，也不把其他仓库的本机脚本作为公共发布前提。使用方可以在自己的项目中自动化“更新干净检出 → 安装 → 回读 → 新会话验收”，但该自动化必须声明自己的路径、权限和失败边界，不能由源仓合并推定成功。
 
-`sync` 校验生产检出干净且在 `main`、快进、报告本次生效的行为变化、**把内容装进缓存**、指纹验收。第三步不是账目维护，**那就是部署本身**。
-
-强制层次：`sync` 在检出不干净或不在 `main` 时直接拒绝（第 2 层）；`plugin_release check --hook` 在会话启动时报缓存漂移，或在判不出时如实说判不出（第 2⁻ 层）；「开发不要在生产检出里做」仍是纪律（第 4 层）——git 不阻止你在任何 worktree 里编辑。
+开发检出与安装检出分离是可判定性要求，不是源码即生产的安全假设：工作树停在特性分支时，它不代表 `origin/main`，也不能用于证明已安装内容。
 
 ## 一、失效条件与最少复核
 
@@ -62,7 +58,7 @@ python C:/Users/Morni/workspace/agent-control/tools/plugin_release/plugin_releas
 
 标记本身是 CI 可检查的（有 `suspect` 就必须同时有命中的失效条件与日期）；「不得再被引用为判据」目前只能是第 4 层。这是本文已知最弱的一条，如实写在这里。
 
-**复核节律不进 CI。** 让 CI 因为时间流逝变红，会把与本次改动无关的红色带进每个 PR。到期与否是本机时间事实，归 `plugin_release` 的本地报告，不归版本化来源。
+**复核节律不进 CI。** 让 CI 因为时间流逝变红，会把与本次改动无关的红色带进每个 PR。到期与否是使用环境的时间事实，由使用方检查并记录，不由版本化来源臆测。
 
 ## 二、退役
 
@@ -74,15 +70,13 @@ python C:/Users/Morni/workspace/agent-control/tools/plugin_release/plugin_releas
 
 **已安装端怎么办，是这一节的重点。**
 
-从 Marketplace 移除**不会**卸载任何运行端上已安装的副本。证据：运行端从不主动清理旧版本缓存，Claude 端曾累积到 76 个版本目录，`claude plugin prune` 只处理自动安装的依赖。因此「从仓库删掉」等于「留下一个不再被维护、但仍会被加载的正文」——这比不删更危险。
+从 Marketplace 移除不会卸载任何运行端上已安装的副本。因此仓库退役与使用端卸载是两个必须分别取证的动作：
 
-退役必须是一条命令走完，任一步失败即中止：
+1. 本仓确认无路由入边，获得负责人批准，从 Codex／Claude 两份 Marketplace 移除并通过来源符合性检查；
+2. 每个使用方按本仓 README 的卸载命令移除对应 Plugin，并回读目标客户端确认不再安装；
+3. 无法访问的使用端明确记为未知，不能由源仓删除推定已经卸载。
 
-```
-python tools/plugin_release/plugin_release.py retire <插件> --apply
-```
-
-它按顺序做：确认无路由入边 → 从两份 Marketplace 移除 → 从每一份物理缓存卸载 → 回读确认三处都不存在。最后一步是关键：**不确认卸载，就不算退役完成**。
+仓库只能证明第 1 项。没有第 2 项的客户端回执，就不能声称该运行端已完成退役。
 
 ## 三、复杂度预算
 

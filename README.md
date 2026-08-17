@@ -1,8 +1,14 @@
 # agent-plugins
 
-`agent-plugins` 用 Git 保存可跨 Codex 与 Claude 恢复的 Agent Plugin 资产。当前先从方法 Skill 开始，建立来源、运行端差异、验证和回滚边界。
+`agent-plugins` 是公开的 Codex／Claude Plugin 源码仓，保存可版本化、可审阅、可回滚的 Plugin、Skill、双端发现清单和来源符合性检查。仓库内容只证明源码状态；不证明任何机器已经安装或正在使用它。
 
-## 当前状态
+## 开始工作
+
+- 本仓变更只由负责人当前指令，或本仓公开、自足且经明确激活的 Issue／PR 合同授权；当前入口清理见 [Issue #11](https://github.com/zaurakworks/agent-plugins/issues/11)。
+- 先读本 README、对应 Plugin manifest 与合同明确引用的文档。私有旧仓链接、迁移前编号和发布记录只作可选历史来源，不能成为理解、复现或授权的前提。
+- 开发、来源验证和本机安装是三个独立状态：修改源码不会自动安装，测试通过也不证明运行端生效。安装与卸载始终由使用者在目标运行端明确执行。
+
+## 发布记录（历史）
 
 本批按[关联 agent-control#258（决定块权威模板落地）修正事件](https://github.com/Eridanus117/agent-control/issues/258#issuecomment-5293496974)补齐关联 agent-plugins#77（决定块三句权威模板）遗漏的发布身份：`github-collaboration` 提升到 `0.3.16`，两端 manifest、两份 Marketplace、符合性版本声明与 README 版本总览同步更新；运行端重装与三端指纹验收必须在本版进入 `main` 后另行完成，不能由源仓合并推定。
 
@@ -22,7 +28,7 @@
 
 本批按 clean-slate 迁仓修正发布身份：仓库所有权由 `Eridanus117` 迁至 `zaurakworks`，七个 Plugin 的 `author.name` 与 `repository` 字段、两份 Marketplace（Claude 与 Codex）、符合性版本声明与 README 版本总览同步更新，七个 Plugin 各递增一个修订号。**运行端重装与三端指纹验收必须在本版进入 `main` 后另行完成，不能由源仓合并推定。**
 
-正文中指向 `Eridanus117/agent-control` 的 Issue 链接**不在本次改动范围**：那些是历史证据，老仓冻结后仍可读，指向它是正确的。
+以下发布记录保留迁移前编号以便仓库维护者溯源；其中私有链接对公共协作者不可用，只是可选历史来源。当前行为、贡献要求和验收必须在本仓公开内容中自足表达。
 
 仓库目前包含八个可安装 Plugin：`grilling` `0.1.2`、`self-improvement` `0.1.7`、`skill-maintenance` `0.1.0`、`knowledge-maintenance` `0.1.3`、`orchestrated-collaboration` `0.2.6`、`adaptive-problem-solving` `0.2.12`、`github-collaboration` `0.3.18` 与 `resource-observability` `0.2.4`。
 
@@ -58,7 +64,7 @@
 
 仓库分别维护两端的原生发现清单：Codex 使用 `.agents/plugins/marketplace.json`，Claude 使用 `.claude-plugin/marketplace.json`。Plugin 正文可以共享，但不能因为两端都叫 Marketplace 就假设清单格式相同。
 
-当前需求和授权只来自 `C:\Users\Morni\workspace\agent-control`。本仓旧 Issue、旧研究和既有设计文档不是默认权威，除非该仓的当前任务明确把它们列为待核验材料。
+本仓当前需求与授权只来自负责人当前明确指令，或本仓公开、自足且经明确激活的 Issue／PR。旧 Issue、私有历史和既有研究默认只作待核验来源，不能自行恢复工作。
 
 ## 安装 `grilling`
 
@@ -165,17 +171,17 @@ node plugins/orchestrated-collaboration/tests/verify-three-party-review.test.ts
 
 这个仓不取代：
 
-- `agent-control` 中已经确认的当前权威、活动任务和授权边界；
+- 使用本仓 Plugin 的项目合同、任务授权与产品政策；
 - 判断内容能否成为可信知识的知识库门槛；
 - 某台电脑上的安装缓存和用户配置。
 
 ## 从这里开始
 
-- 当前目标、授权和边界：读取 `C:\Users\Morni\workspace\agent-control\README.md` 及其指向的当前任务；
+- 当前目标、授权和边界：读取本仓公开、自足且经负责人明确激活的 Issue／PR；没有明确合同则只做当前请求的最小范围；
 - 当前可安装内容：读取本 README 和对应 Plugin manifest；
 - `issue-workflow` 的三种模式、验收场景走读和当前证据等级：[`docs/issue-workflow-walkthrough.md`](docs/issue-workflow-walkthrough.md)；
 - **每个 Skill 替你做什么、什么时候用、花掉多少复杂度预算：[`docs/skills-overview.md`](docs/skills-overview.md)**（生成产物，符合性测试钉住它不会漂）；
 - 「装了才算数」的部署方式、Skill 的失效条件、最少复核、退役路径与复杂度预算：[`docs/lifecycle.md`](docs/lifecycle.md)。其中「必须声明失效条件与最少复核步骤」「数量与语料总量不得净增」由本仓 CI 强制；
 - [方法资产模型](docs/asset-model.md)、[符合性检查](docs/conformance.md)、旧 Issue 和 `codex-work`：只作为历史或待核验材料，不默认指导新工作。
 
-不要从旧交付顺序自行恢复工作。只执行 `agent-control` 当前任务明确授权的改动。
+不要从旧交付顺序、私有历史或开放状态自行恢复工作。跨仓项目调用本仓 Plugin 时，以调用方公开合同和本仓当前可用接口的交集为边界。
