@@ -2,6 +2,8 @@
 
 `agent-plugins` 是公开的 Codex／Claude Plugin 源码仓，保存可版本化、可审阅、可回滚的 Plugin、Skill、双端发现清单和来源符合性检查。仓库内容只证明源码状态；不证明任何机器已经安装或正在使用它。
 
+> **迁移状态**：当前 Plugin、Skill 和双端 Marketplace 已迁入 [`zaurakworks/agent-system`](https://github.com/zaurakworks/agent-system)。新源码与安装入口使用 `agent-system`；本仓暂时保留开放 Issue、Draft PR 和发布历史，直到迁移索引 [`agent-system#70`](https://github.com/zaurakworks/agent-system/issues/70) 中的 successor、真实 Codex/Claude 证据和归档门完成。迁移不表示旧事项已验收或关闭。
+
 ## 开始工作
 
 - 本仓变更只由负责人当前指令，或本仓公开、自足且经明确激活的 Issue／PR 合同授权；当前入口清理见 [Issue #11](https://github.com/zaurakworks/agent-plugins/issues/11)。
@@ -66,7 +68,7 @@
 
 ## 安装 `grilling`
 
-先克隆本仓，然后把仓库根目录作为本地 Marketplace 添加。下面的 `<repo-root>` 是本仓的绝对路径。
+先克隆 [`zaurakworks/agent-system`](https://github.com/zaurakworks/agent-system)，然后把该仓根目录作为本地 Marketplace 添加。下面的 `<repo-root>` 是 `agent-system` 的绝对路径。
 
 Codex：
 
